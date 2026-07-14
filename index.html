@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>Daily Tracker</title>
+
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Daily Tracker" />
+<meta name="theme-color" content="#1c2128" />
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="app-header">
+  <div id="today-label" class="today-label">Loading…</div>
+  <div id="score-label" class="score-label">🏆 0 / 0 pts</div>
+  <div class="score-bar"><div id="score-bar-fill" class="score-bar-fill"></div></div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="today">Today</button>
+  <button class="tab-btn" data-tab="monthly">Monthly</button>
+  <button class="tab-btn" data-tab="archive">Archive</button>
+  <button class="tab-btn" data-tab="notes">Notes</button>
+</nav>
+
+<main>
+
+  <!-- TODAY TAB -->
+  <section id="tab-today" class="tab-panel active">
+
+    <div class="card">
+      <h2>📋 Daily Routine Tasks</h2>
+      <div id="routine-list" class="task-list"></div>
+      <div class="add-row">
+        <input id="add-routine-label" type="text" placeholder="New task…" />
+        <input id="add-routine-points" type="number" value="5" />
+        <button class="add-task-btn" data-kind="routine">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🥗 Healthy Meals Log</h2>
+      <div id="meals-list" class="task-list"></div>
+      <div class="add-row">
+        <input id="add-meals-label" type="text" placeholder="New meal…" />
+        <input id="add-meals-points" type="number" value="8" />
+        <button class="add-task-btn" data-kind="meals">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>⏰ Timing Tracker</h2>
+      <p class="hint">24-hr format. Earlier sleep, and a longer gap before it for meals/gym, scores higher.</p>
+      <div class="timing-row">
+        <label>🌙 Sleep time</label>
+        <input type="time" id="sleep-time" />
+        <span class="pt-badge" id="sleep-score">–</span>
+      </div>
+      <div class="timing-row">
+        <label>🍽️ Last meal</label>
+        <input type="time" id="last-meal-time" />
+        <span class="pt-badge" id="meal-score">–</span>
+      </div>
+      <div class="timing-row">
+        <label>💪 Gym finish</label>
+        <input type="time" id="gym-finish-time" />
+        <span class="pt-badge" id="gym-score">–</span>
+      </div>
+      <div class="timing-row">
+        <label>☕ Last coffee</label>
+        <input type="time" id="last-coffee-time" />
+        <span class="pt-badge" id="coffee-score">–</span>
+      </div>
+      <div class="timing-row">
+        <label>📵 No doom scrolling</label>
+        <input type="checkbox" id="no-scroll-check" />
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🏋️ Gym Schedule</h2>
+      <div id="gym-schedule-list" class="gym-list"></div>
+      <p id="gym-bonus-label" class="hint"></p>
+    </div>
+
+    <div class="card">
+      <h2>🎯 Side Missions</h2>
+      <div id="side-list" class="task-list"></div>
+      <div class="add-row">
+        <input id="add-side-label" type="text" placeholder="New mission…" />
+        <input id="add-side-points" type="number" value="5" />
+        <button class="add-task-btn" data-kind="side">+ Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 id="calendar-month-label">📅 Score Calendar</h2>
+      <div id="calendar-grid" class="calendar-grid"></div>
+    </div>
+
+  </section>
+
+  <!-- MONTHLY TAB -->
+  <section id="tab-monthly" class="tab-panel">
+    <div class="card">
+      <h2 id="monthly-label">📅 Monthly Session Tracker</h2>
+      <div id="monthly-list" class="monthly-table"></div>
+      <p id="monthly-total" class="hint"></p>
+    </div>
+  </section>
+
+  <!-- ARCHIVE TAB -->
+  <section id="tab-archive" class="tab-panel">
+    <div class="card">
+      <h2>🗂️ Monthly Archive</h2>
+      <div id="archive-list"></div>
+    </div>
+  </section>
+
+  <!-- NOTES TAB -->
+  <section id="tab-notes" class="tab-panel">
+    <div class="card">
+      <h2>📚 Reference &amp; Notes</h2>
+      <textarea id="notes-area" rows="20"></textarea>
+    </div>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
