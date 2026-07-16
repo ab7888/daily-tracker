@@ -192,6 +192,25 @@ main {
   min-width: 0;
 }
 
+.bulk-add-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.bulk-add-row textarea {
+  width: 100%;
+  min-height: 64px;
+  font-family: inherit;
+  font-size: 13px;
+  resize: vertical;
+}
+
+.bulk-add-row button {
+  align-self: flex-start;
+}
+
 .add-row input[type="number"] {
   width: 56px;
 }
