@@ -18,7 +18,7 @@
 
 <header class="app-header">
   <div id="today-label" class="today-label">Loading…</div>
-  <div id="score-label" class="score-label">🏆 0 / 0 pts</div>
+  <div id="score-label" class="score-label"><span class="icon" data-icon="medal"></span><span id="score-label-text">0 / 0 pts</span></div>
   <div class="score-bar"><div id="score-bar-fill" class="score-bar-fill"></div></div>
 </header>
 
@@ -35,7 +35,7 @@
   <section id="tab-today" class="tab-panel active">
 
     <div class="card">
-      <h2>📋 Daily Routine Tasks</h2>
+      <h2><span class="icon" data-icon="clipboard"></span> Daily Routine Tasks</h2>
       <div id="routine-list" class="task-list"></div>
       <div class="add-row">
         <input id="add-routine-label" type="text" placeholder="New task…" />
@@ -46,7 +46,7 @@
     </div>
 
     <div class="card">
-      <h2>🥗 Healthy Meals Log</h2>
+      <h2><span class="icon" data-icon="salad"></span> Healthy Meals Log</h2>
       <div id="meals-list" class="task-list"></div>
       <div class="add-row">
         <input id="add-meals-label" type="text" placeholder="New meal…" />
@@ -57,42 +57,42 @@
     </div>
 
     <div class="card">
-      <h2>⏰ Timing Tracker</h2>
+      <h2><span class="icon" data-icon="clock"></span> Timing Tracker</h2>
       <p class="hint">24-hr format. Earlier sleep, and a longer gap before it for meals/gym, scores higher.</p>
       <div class="timing-row">
-        <label>🌙 Sleep time</label>
+        <label><span class="icon icon-sm" data-icon="moon"></span> Sleep time</label>
         <input type="time" id="sleep-time" />
         <span class="pt-badge" id="sleep-score">–</span>
       </div>
       <div class="timing-row">
-        <label>🍽️ Last meal</label>
+        <label><span class="icon icon-sm" data-icon="fork"></span> Last meal</label>
         <input type="time" id="last-meal-time" />
         <span class="pt-badge" id="meal-score">–</span>
       </div>
       <div class="timing-row">
-        <label>💪 Gym finish</label>
+        <label><span class="icon icon-sm" data-icon="dumbbell"></span> Gym finish</label>
         <input type="time" id="gym-finish-time" />
         <span class="pt-badge" id="gym-score">–</span>
       </div>
       <div class="timing-row">
-        <label>☕ Last coffee</label>
+        <label><span class="icon icon-sm" data-icon="coffee"></span> Last coffee</label>
         <input type="time" id="last-coffee-time" />
         <span class="pt-badge" id="coffee-score">–</span>
       </div>
       <div class="timing-row">
-        <label>📵 No doom scrolling</label>
+        <label><span class="icon icon-sm" data-icon="noPhone"></span> No doom scrolling</label>
         <input type="checkbox" id="no-scroll-check" />
       </div>
     </div>
 
     <div class="card">
-      <h2>🏋️ Gym Schedule</h2>
+      <h2><span class="icon" data-icon="dumbbell"></span> Gym Schedule</h2>
       <div id="gym-schedule-list" class="gym-list"></div>
       <p id="gym-bonus-label" class="hint"></p>
     </div>
 
     <div class="card">
-      <h2>🎯 Side Missions</h2>
+      <h2><span class="icon" data-icon="target"></span> Side Missions</h2>
       <div id="side-list" class="task-list"></div>
       <div class="add-row">
         <input id="add-side-label" type="text" placeholder="New mission…" />
@@ -103,20 +103,20 @@
     </div>
 
     <div class="card">
-      <h2 id="calendar-month-label">📅 Score Calendar</h2>
+      <h2><span class="icon" data-icon="calendar"></span> <span id="calendar-month-label">Score Calendar</span></h2>
       <p class="hint">Tap a day to view or set a high-level plan for that date. Numbers show points earned.</p>
       <div id="calendar-grid" class="calendar-grid"></div>
     </div>
 
     <div class="card">
-      <h2>💾 Save / Backdate Score</h2>
+      <h2><span class="icon" data-icon="save"></span> Save / Backdate Score</h2>
       <p class="hint">Today's cumulative score is saved to the calendar automatically. Pick an earlier date to backdate or correct a score.</p>
       <div class="save-score-row">
         <input type="date" id="save-score-date" />
         <input type="number" id="save-score-earned" placeholder="Earned" />
         <span class="save-score-sep">/</span>
         <input type="number" id="save-score-max" placeholder="Max" />
-        <button id="save-score-btn" class="primary-btn">💾 Save</button>
+        <button id="save-score-btn" class="primary-btn"><span class="icon icon-sm" data-icon="save"></span> Save</button>
       </div>
     </div>
 
@@ -125,7 +125,7 @@
   <!-- MONTHLY TAB -->
   <section id="tab-monthly" class="tab-panel">
     <div class="card">
-      <h2 id="monthly-label">📅 Monthly Session Tracker</h2>
+      <h2><span class="icon" data-icon="calendar"></span> <span id="monthly-label">Monthly Session Tracker</span></h2>
       <div id="monthly-list" class="monthly-table"></div>
       <p id="monthly-total" class="hint"></p>
     </div>
@@ -134,7 +134,7 @@
   <!-- ARCHIVE TAB -->
   <section id="tab-archive" class="tab-panel">
     <div class="card">
-      <h2>🗂️ Monthly Archive</h2>
+      <h2><span class="icon" data-icon="archive"></span> Monthly Archive</h2>
       <div id="archive-list"></div>
     </div>
   </section>
@@ -142,7 +142,7 @@
   <!-- NOTES TAB -->
   <section id="tab-notes" class="tab-panel">
     <div class="card">
-      <h2>📚 Reference &amp; Notes</h2>
+      <h2><span class="icon" data-icon="book"></span> Reference &amp; Notes</h2>
       <textarea id="notes-area" rows="20"></textarea>
     </div>
   </section>
