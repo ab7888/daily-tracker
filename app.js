@@ -43,20 +43,21 @@ function defaultState() {
       ["👨‍🍳 Meal prep", 8],
       ["🧴 Asthma Inhaler", 6],
       ["Water Floss", 2]
-    ].map(([label, points]) => ({ id: uid(), label, points, done: false })),
+    ].map(([label, points]) => ({ id: uid(), label, points, done: false, time: "" })),
     meals: [
       ["🥩 Healthy Meal 1", 8],
       ["🥦 Healthy Meal 2", 8],
       ["🫠 Healthy Meal 3", 8],
       ["🥦 No Junk Food?", 8]
-    ].map(([label, points]) => ({ id: uid(), label, points, done: false })),
+    ].map(([label, points]) => ({ id: uid(), label, points, done: false, time: "" })),
     timing: { sleep: "", lastMeal: "", gymFinish: "", lastCoffee: "", noScroll: false },
     gymSchedule: GYM_DAYS.map((day, i) => ({ day, type: GYM_TYPES[i], done: false })),
     sideMissions: [
       ["Shave", 5],
       ["Make bed", 5]
-    ].map(([label, points]) => ({ id: uid(), label, points, done: false })),
+    ].map(([label, points]) => ({ id: uid(), label, points, done: false, time: "" })),
     dailyLog: {},
+    dayPlans: {},
     monthly: {
       year: d.getFullYear(),
       month: d.getMonth() + 1, // 1-12
@@ -84,7 +85,8 @@ function loadState() {
     const base = defaultState();
     return Object.assign({}, base, parsed, {
       timing: Object.assign({}, base.timing, parsed.timing),
-      monthly: Object.assign({}, base.monthly, parsed.monthly)
+      monthly: Object.assign({}, base.monthly, parsed.monthly),
+      dayPlans: Object.assign({}, base.dayPlans, parsed.dayPlans)
     });
   } catch (e) {
     console.error("Failed to parse saved state, starting fresh.", e);
@@ -260,8 +262,31 @@ function renderAll() {
   renderCalendar();
   renderMonthly();
   renderArchive();
+  renderSaveScore();
   $("#notes-area").value = state.notes;
   saveState();
+}
+
+// Keeps the Save/Backdate Score inputs in sync: live totals while the
+// selected date is today (read-only, since that's always the current
+// running score), editable and untouched otherwise so a backdate-in-
+// progress doesn't get clobbered by unrelated renders.
+function applySaveScoreToday(dateInput, earnedInput, maxInput) {
+  const isToday = dateInput.value === todayISO();
+  earnedInput.readOnly = isToday;
+  maxInput.readOnly = isToday;
+  if (isToday) {
+    const totals = computeTotals(state);
+    earnedInput.value = totals.earned;
+    maxInput.value = totals.max;
+  }
+  return isToday;
+}
+
+function renderSaveScore() {
+  const dateInput = $("#save-score-date");
+  if (!dateInput.value) dateInput.value = todayISO();
+  applySaveScoreToday(dateInput, $("#save-score-earned"), $("#save-score-max"));
 }
 
 function renderHeader() {
@@ -284,6 +309,7 @@ function renderTaskSection(listId, tasks, kind) {
     row.innerHTML = `
       <button class="check-btn" data-kind="${kind}" data-id="${t.id}" aria-label="toggle">${t.done ? "✓" : "✗"}</button>
       <span class="task-label" data-kind="${kind}" data-id="${t.id}">${esc(t.label)}</span>
+      <input type="time" class="task-time" data-kind="${kind}" data-id="${t.id}" value="${t.time || ""}" title="Desired completion time" />
       <span class="task-points ${t.points < 0 ? "neg" : ""}" data-kind="${kind}" data-id="${t.id}">${t.points > 0 ? "+" : ""}${t.points}</span>
       <button class="icon-btn edit-btn" data-kind="${kind}" data-id="${t.id}" aria-label="edit">✎</button>
       <button class="icon-btn del-btn" data-kind="${kind}" data-id="${t.id}" aria-label="delete">🗑</button>
@@ -347,15 +373,23 @@ function renderCalendar() {
     const iso = todayISO(new Date(year, month, day));
     const cell = document.createElement("div");
     cell.className = "cal-cell";
+    cell.dataset.date = iso;
     let entry = state.dailyLog[iso];
     if (iso === todayISO()) entry = { earned: totals.earned, max: totals.max };
+    let ptsHtml = "";
+    const titleParts = [];
     if (entry && entry.max > 0) {
       const pct = Math.max(0, Math.min(1, entry.earned / entry.max));
       cell.style.background = heatColor(pct);
-      cell.title = `${entry.earned} / ${entry.max} pts`;
+      ptsHtml = `<span class="cal-cell-pts">${entry.earned}</span>`;
+      titleParts.push(`${entry.earned} / ${entry.max} pts`);
     }
+    const plan = state.dayPlans[iso];
+    const planMark = plan ? `<span class="cal-cell-plan">📝</span>` : "";
+    if (plan) titleParts.push(`Plan: ${plan}`);
+    cell.title = titleParts.join(" — ");
     if (iso === todayISO()) cell.classList.add("today");
-    cell.innerHTML = `<span>${day}</span>`;
+    cell.innerHTML = `<span class="cal-cell-day">${day}</span>${ptsHtml}${planMark}`;
     el.appendChild(cell);
   }
 }
@@ -484,12 +518,14 @@ document.addEventListener("click", (e) => {
     const list = getList(kind);
     const labelInput = $(`#add-${kind}-label`);
     const pointsInput = $(`#add-${kind}-points`);
+    const timeInput = $(`#add-${kind}-time`);
     const label = labelInput.value.trim();
     const points = Number(pointsInput.value);
     if (!label || Number.isNaN(points)) return;
-    list.push({ id: uid(), label, points, done: false });
+    list.push({ id: uid(), label, points, done: false, time: timeInput ? timeInput.value : "" });
     labelInput.value = "";
     pointsInput.value = "5";
+    if (timeInput) timeInput.value = "";
     renderAll();
     return;
   }
@@ -498,10 +534,58 @@ document.addEventListener("click", (e) => {
     switchTab(t.dataset.tab);
     return;
   }
+
+  const calCell = t.closest && t.closest(".cal-cell");
+  if (calCell && calCell.dataset.date) {
+    const iso = calCell.dataset.date;
+    const dateObj = new Date(iso + "T00:00:00");
+    const label = dateObj.toLocaleDateString(undefined, { weekday: "long", day: "2-digit", month: "short" });
+    const existing = state.dayPlans[iso] || "";
+    const plan = prompt(`High-level plan for ${label}:`, existing);
+    if (plan === null) return;
+    if (plan.trim()) state.dayPlans[iso] = plan.trim();
+    else delete state.dayPlans[iso];
+    renderAll();
+    return;
+  }
+
+  if (t.id === "save-score-btn") {
+    const date = $("#save-score-date").value || todayISO();
+    const earned = Number($("#save-score-earned").value);
+    const max = Number($("#save-score-max").value);
+    if (Number.isNaN(earned) || Number.isNaN(max) || max < 0) {
+      alert("Enter valid earned and max point values.");
+      return;
+    }
+    state.dailyLog[date] = { earned, max };
+    renderAll();
+    return;
+  }
 });
 
 document.addEventListener("change", (e) => {
   const t = e.target;
+
+  if (t.id === "save-score-date") {
+    const earnedInput = $("#save-score-earned");
+    const maxInput = $("#save-score-max");
+    const isToday = applySaveScoreToday(t, earnedInput, maxInput);
+    if (!isToday) {
+      const existing = state.dailyLog[t.value];
+      earnedInput.value = existing ? existing.earned : "";
+      maxInput.value = existing ? existing.max : "";
+    }
+    return;
+  }
+
+  if (t.classList.contains("task-time")) {
+    const list = getList(t.dataset.kind);
+    const item = list.find((x) => x.id === t.dataset.id);
+    if (item) item.time = t.value;
+    renderAll();
+    return;
+  }
+
   if (t.id === "sleep-time") state.timing.sleep = t.value;
   if (t.id === "last-meal-time") state.timing.lastMeal = t.value;
   if (t.id === "gym-finish-time") state.timing.gymFinish = t.value;

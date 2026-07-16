@@ -39,6 +39,7 @@
       <div id="routine-list" class="task-list"></div>
       <div class="add-row">
         <input id="add-routine-label" type="text" placeholder="New task…" />
+        <input id="add-routine-time" type="time" title="Desired completion time (optional)" />
         <input id="add-routine-points" type="number" value="5" />
         <button class="add-task-btn" data-kind="routine">+ Add</button>
       </div>
@@ -49,6 +50,7 @@
       <div id="meals-list" class="task-list"></div>
       <div class="add-row">
         <input id="add-meals-label" type="text" placeholder="New meal…" />
+        <input id="add-meals-time" type="time" title="Desired completion time (optional)" />
         <input id="add-meals-points" type="number" value="8" />
         <button class="add-task-btn" data-kind="meals">+ Add</button>
       </div>
@@ -94,6 +96,7 @@
       <div id="side-list" class="task-list"></div>
       <div class="add-row">
         <input id="add-side-label" type="text" placeholder="New mission…" />
+        <input id="add-side-time" type="time" title="Desired completion time (optional)" />
         <input id="add-side-points" type="number" value="5" />
         <button class="add-task-btn" data-kind="side">+ Add</button>
       </div>
@@ -101,7 +104,20 @@
 
     <div class="card">
       <h2 id="calendar-month-label">📅 Score Calendar</h2>
+      <p class="hint">Tap a day to view or set a high-level plan for that date. Numbers show points earned.</p>
       <div id="calendar-grid" class="calendar-grid"></div>
+    </div>
+
+    <div class="card">
+      <h2>💾 Save / Backdate Score</h2>
+      <p class="hint">Today's cumulative score is saved to the calendar automatically. Pick an earlier date to backdate or correct a score.</p>
+      <div class="save-score-row">
+        <input type="date" id="save-score-date" />
+        <input type="number" id="save-score-earned" placeholder="Earned" />
+        <span class="save-score-sep">/</span>
+        <input type="number" id="save-score-max" placeholder="Max" />
+        <button id="save-score-btn" class="primary-btn">💾 Save</button>
+      </div>
     </div>
 
   </section>

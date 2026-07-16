@@ -205,9 +205,42 @@ input, textarea {
   font-size: 14px;
 }
 
-input[type="time"] { flex: 1; }
+.timing-row input[type="time"] { flex: 1; }
 
-button.add-task-btn {
+input[readonly] { opacity: 0.7; }
+
+.task-time {
+  width: 74px;
+  flex-shrink: 0;
+  font-size: 11px;
+  padding: 4px;
+}
+
+.add-row input[type="time"] {
+  width: 84px;
+  flex-shrink: 0;
+}
+
+.save-score-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.save-score-row input[type="date"] {
+  flex: 1 1 140px;
+  min-width: 130px;
+}
+
+.save-score-row input[type="number"] {
+  width: 68px;
+}
+
+.save-score-sep { color: var(--muted); }
+
+button.add-task-btn,
+button.primary-btn {
   background: var(--accent);
   color: #fff;
   border: none;
@@ -276,14 +309,33 @@ button.add-task-btn {
   border-radius: 6px;
   border: 1px solid var(--border);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: 11px;
   background: var(--bg);
+  position: relative;
+  cursor: pointer;
 }
 
 .cal-cell.today {
   outline: 2px solid var(--accent-bright);
+}
+
+.cal-cell-day { font-size: 11px; }
+
+.cal-cell-pts {
+  font-size: 9px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.cal-cell-plan {
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  font-size: 8px;
+  line-height: 1;
 }
 
 .monthly-table {
