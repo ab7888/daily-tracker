@@ -33,8 +33,66 @@ const ICON_SVG = {
   sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.5" y1="4.5" x2="6.5" y2="6.5"/><line x1="17.5" y1="17.5" x2="19.5" y2="19.5"/></svg>',
   wind: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h12a3 3 0 1 0-3-3"/><path d="M3 16h15a3 3 0 1 1-3 3"/></svg>',
   trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1V7"/><path d="M6 7l1 13a1.5 1.5 0 0 0 1.5 1.5h7a1.5 1.5 0 0 0 1.5-1.5l1-13"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>',
-  upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>'
+  upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>',
+  droplet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 4 6 8 6 11a6 6 0 0 1-12 0c0-3 3-7 6-11Z"/></svg>',
+  stretch: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 8v6"/><path d="M7 11l5-2 5 2"/><path d="M9 20l3-6 3 6"/></svg>',
+  foot: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="11" cy="14" rx="4" ry="7"/><circle cx="9" cy="4" r="1.2"/><circle cx="12" cy="3" r="1.2"/><circle cx="15" cy="4.5" r="1.2"/></svg>',
+  footsteps: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="7" cy="8" rx="2" ry="3.2" transform="rotate(-15 7 8)"/><ellipse cx="16" cy="15" rx="2" ry="3.2" transform="rotate(15 16 15)"/></svg>',
+  headphones: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="14" width="4" height="6" rx="1.5"/><rect x="17.5" y="14" width="4" height="6" rx="1.5"/></svg>',
+  lotus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="2"/><path d="M12 8v3"/><path d="M6 19c0-3 3-5 6-5s6 2 6 5"/><path d="M9 14l-3 3M15 14l3 3"/></svg>',
+  shower: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4a5 5 0 0 1 10 0"/><line x1="12" y1="4" x2="12" y2="2"/><rect x="5" y="4" width="14" height="4" rx="2"/><line x1="8" y1="12" x2="8" y2="14"/><line x1="12" y1="12" x2="12" y2="14"/><line x1="16" y1="12" x2="16" y2="14"/><line x1="8" y1="17" x2="8" y2="19"/><line x1="12" y1="17" x2="12" y2="19"/><line x1="16" y1="17" x2="16" y2="19"/></svg>',
+  pill: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 17.5a5 5 0 0 1 0-7l4-4a5 5 0 0 1 7 7l-4 4a5 5 0 0 1-7 0Z"/><line x1="10" y1="10" x2="14" y2="14"/></svg>',
+  sparkle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></svg>',
+  brain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="10" r="4"/><circle cx="14" cy="8" r="5"/><circle cx="17" cy="12.5" r="3"/><circle cx="6.5" cy="19" r="1.2"/><circle cx="4" cy="22" r="0.8"/></svg>',
+  flame: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2 3-1 4-1 7a3 3 0 0 0 6 0c0-1-.5-2-1-3 1 .5 2 2 2 4a6 6 0 0 1-12 0c0-4 3-5 3-8 1 1 2 1 3 0Z"/></svg>',
+  pot: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16"/><path d="M5 11v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/><path d="M9 11V8a3 3 0 0 1 6 0v3"/><line x1="12" y1="5" x2="12" y2="3"/></svg>',
+  inhaler: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="8" height="12" rx="2"/><path d="M10 8V5a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v3"/><line x1="10" y1="20" x2="10" y2="22"/><line x1="14" y1="20" x2="14" y2="22"/></svg>',
+  plate: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg>'
 };
+
+// Maps an already-saved task's exact old (emoji-prefixed) label to its new
+// icon-based label/icon — lets loadState() upgrade a device's saved tasks
+// in place without touching anything the user has renamed or added.
+const ROUTINE_ICON_MIGRATIONS = {
+  "🧴 Face Routine (AM)": { label: "Face Routine (AM)", icon: "droplet" },
+  "🧘 Stretch": { label: "Stretch", icon: "stretch" },
+  "🦶 Ankle Training": { label: "Ankle Training", icon: "foot" },
+  "🚶 Walk / Steps": { label: "Walk / Steps", icon: "footsteps" },
+  "📚 Audiobook": { label: "Audiobook", icon: "headphones" },
+  "🧘 Meditate": { label: "Meditate", icon: "lotus" },
+  "🚿 Shower": { label: "Shower", icon: "shower" },
+  "💊 Supplements": { label: "Supplements", icon: "pill" },
+  "🧹 Clean": { label: "Clean", icon: "sparkle" },
+  "🚶 QL Recovery": { label: "QL Recovery", icon: "footsteps" },
+  "📵 Relapse": { label: "Relapse", icon: "noPhone" },
+  "🧠 Mental dump + Controlled silence": { label: "Mental dump + Controlled silence", icon: "brain" },
+  "💪 Gym Session": { label: "Gym Session", icon: "dumbbell" },
+  "🧴 Face Routine (PM)": { label: "Face Routine (PM)", icon: "droplet" },
+  "📚 Language learning": { label: "Language learning", icon: "book" },
+  "🧠 Respondent surveys": { label: "Respondent surveys", icon: "brain" },
+  "😤 Face your fears": { label: "Face your fears", icon: "flame" },
+  "🌙 Evening Wind Down": { label: "Evening Wind Down", icon: "moon" },
+  "👨‍🍳 Meal prep": { label: "Meal prep", icon: "pot" },
+  "🧴 Asthma Inhaler": { label: "Asthma Inhaler", icon: "inhaler" }
+};
+
+const MEALS_ICON_MIGRATIONS = {
+  "🥩 Healthy Meal 1": { label: "Healthy Meal 1", icon: "plate" },
+  "🥦 Healthy Meal 2": { label: "Healthy Meal 2", icon: "plate" },
+  "🫠 Healthy Meal 3": { label: "Healthy Meal 3", icon: "plate" },
+  "🥦 No Junk Food?": { label: "No Junk Food?", icon: "salad" }
+};
+
+function migrateTaskIcons(list, map) {
+  if (!Array.isArray(list)) return;
+  list.forEach((t) => {
+    const m = map[t.label];
+    if (m && !t.icon) {
+      t.label = m.label;
+      t.icon = m.icon;
+    }
+  });
+}
 
 function injectIcons() {
   $$("[data-icon]").forEach((el) => {
@@ -63,40 +121,40 @@ function defaultState() {
     version: 1,
     currentDate: today,
     routineTasks: [
-      ["🧴 Face Routine (AM)", 5],
-      ["🧘 Stretch", 8],
-      ["🦶 Ankle Training", 5],
-      ["🚶 Walk / Steps", 10],
-      ["📚 Audiobook", 4],
-      ["🧘 Meditate", 12],
-      ["🚿 Shower", 5],
-      ["💊 Supplements", 5],
-      ["🧹 Clean", 5],
-      ["🚶 QL Recovery", 5],
-      ["📵 Relapse", -80],
-      ["🧠 Mental dump + Controlled silence", 10],
-      ["💪 Gym Session", 15],
-      ["🧴 Face Routine (PM)", 5],
-      ["📚 Language learning", 10],
-      ["🧠 Respondent surveys", 5],
-      ["😤 Face your fears", 10],
-      ["🌙 Evening Wind Down", 5],
-      ["👨‍🍳 Meal prep", 8],
-      ["🧴 Asthma Inhaler", 6],
-      ["Water Floss", 2]
-    ].map(([label, points]) => ({ id: uid(), label, points, done: false, time: "" })),
+      ["Face Routine (AM)", 5, "droplet"],
+      ["Stretch", 8, "stretch"],
+      ["Ankle Training", 5, "foot"],
+      ["Walk / Steps", 10, "footsteps"],
+      ["Audiobook", 4, "headphones"],
+      ["Meditate", 12, "lotus"],
+      ["Shower", 5, "shower"],
+      ["Supplements", 5, "pill"],
+      ["Clean", 5, "sparkle"],
+      ["QL Recovery", 5, "footsteps"],
+      ["Relapse", -80, "noPhone"],
+      ["Mental dump + Controlled silence", 10, "brain"],
+      ["Gym Session", 15, "dumbbell"],
+      ["Face Routine (PM)", 5, "droplet"],
+      ["Language learning", 10, "book"],
+      ["Respondent surveys", 5, "brain"],
+      ["Face your fears", 10, "flame"],
+      ["Evening Wind Down", 5, "moon"],
+      ["Meal prep", 8, "pot"],
+      ["Asthma Inhaler", 6, "inhaler"],
+      ["Water Floss", 2, ""]
+    ].map(([label, points, icon]) => ({ id: uid(), label, points, done: false, time: "", icon })),
     meals: [
-      ["🥩 Healthy Meal 1", 8],
-      ["🥦 Healthy Meal 2", 8],
-      ["🫠 Healthy Meal 3", 8],
-      ["🥦 No Junk Food?", 8]
-    ].map(([label, points]) => ({ id: uid(), label, points, done: false, time: "" })),
+      ["Healthy Meal 1", 8, "plate"],
+      ["Healthy Meal 2", 8, "plate"],
+      ["Healthy Meal 3", 8, "plate"],
+      ["No Junk Food?", 8, "salad"]
+    ].map(([label, points, icon]) => ({ id: uid(), label, points, done: false, time: "", icon })),
     timing: { sleep: "", lastMeal: "", gymFinish: "", lastCoffee: "", noScroll: false },
     gymSchedule: GYM_DAYS.map((day, i) => ({ day, type: GYM_TYPES[i], done: false })),
     sideMissions: [
-      ["Shave", 5],
-      ["Make bed", 5]
-    ].map(([label, points]) => ({ id: uid(), label, points, done: false, time: "" })),
+      ["Shave", 5, ""],
+      ["Make bed", 5, ""]
+    ].map(([label, points, icon]) => ({ id: uid(), label, points, done: false, time: "", icon })),
     dailyLog: {},
     dayPlans: {},
     monthly: {
@@ -124,11 +182,14 @@ function loadState() {
     const parsed = JSON.parse(raw);
     // fill in any missing fields from a default (forward-compat safety)
     const base = defaultState();
-    return Object.assign({}, base, parsed, {
+    const merged = Object.assign({}, base, parsed, {
       timing: Object.assign({}, base.timing, parsed.timing),
       monthly: Object.assign({}, base.monthly, parsed.monthly),
       dayPlans: Object.assign({}, base.dayPlans, parsed.dayPlans)
     });
+    migrateTaskIcons(merged.routineTasks, ROUTINE_ICON_MIGRATIONS);
+    migrateTaskIcons(merged.meals, MEALS_ICON_MIGRATIONS);
+    return merged;
   } catch (e) {
     console.error("Failed to parse saved state, starting fresh.", e);
     return defaultState();
@@ -349,6 +410,7 @@ function renderTaskSection(listId, tasks, kind) {
     row.className = "task-row" + (t.done ? " done" : "");
     row.innerHTML = `
       <button class="check-btn" data-kind="${kind}" data-id="${t.id}" aria-label="toggle">${t.done ? "✓" : "✗"}</button>
+      ${t.icon ? iconTag(t.icon) : ""}
       <span class="task-label" data-kind="${kind}" data-id="${t.id}">${esc(t.label)}</span>
       <input type="time" class="task-time" data-kind="${kind}" data-id="${t.id}" value="${t.time || ""}" title="Desired completion time" />
       <span class="task-points ${t.points < 0 ? "neg" : ""}" data-kind="${kind}" data-id="${t.id}">${t.points > 0 ? "+" : ""}${t.points}</span>
@@ -563,7 +625,7 @@ document.addEventListener("click", (e) => {
     const label = labelInput.value.trim();
     const points = Number(pointsInput.value);
     if (!label || Number.isNaN(points)) return;
-    list.push({ id: uid(), label, points, done: false, time: timeInput ? timeInput.value : "" });
+    list.push({ id: uid(), label, points, done: false, time: timeInput ? timeInput.value : "", icon: "" });
     labelInput.value = "";
     pointsInput.value = "5";
     if (timeInput) timeInput.value = "";
@@ -576,7 +638,7 @@ document.addEventListener("click", (e) => {
     const lines = textarea.value.split("\n").map((l) => l.trim()).filter(Boolean);
     if (lines.length === 0) return;
     lines.forEach((label) => {
-      state.sideMissions.push({ id: uid(), label, points: 5, done: false, time: "" });
+      state.sideMissions.push({ id: uid(), label, points: 5, done: false, time: "", icon: "" });
     });
     textarea.value = "";
     renderAll();
