@@ -493,23 +493,40 @@ function attachDragHandlers(containerEl, kind) {
 
         const dragRect = dragEl.getBoundingClientRect();
         const dragCenter = dragRect.top + dragRect.height / 2;
-        const siblings = Array.from(containerEl.querySelectorAll(".task-row:not(.dragging)"));
 
-        for (const sib of siblings) {
-          const sibRect = sib.getBoundingClientRect();
-          const sibCenter = sibRect.top + sibRect.height / 2;
-          if (deltaY > 0 && dragCenter > sibCenter) {
-            containerEl.insertBefore(dragEl, sib.nextSibling);
-            swapListItems(list, dragEl.dataset.id, sib.dataset.id);
-            startY = ev.clientY;
-            dragEl.style.transform = "translateY(0px)";
-            break;
-          } else if (deltaY < 0 && dragCenter < sibCenter) {
-            containerEl.insertBefore(dragEl, sib);
-            swapListItems(list, dragEl.dataset.id, sib.dataset.id);
-            startY = ev.clientY;
-            dragEl.style.transform = "translateY(0px)";
-            break;
+        // Only ever compare against the row immediately adjacent to dragEl in
+        // the direction of travel — not every row in the list. Checking the
+        // whole list (in top-to-bottom order) meant that once dragEl had
+        // passed a row, that row was still first in iteration order and
+        // trivially satisfied "dragCenter is past it" on every subsequent
+        // tick, re-triggering a swap *with the row already passed*. The DOM
+        // move was a no-op (they were already adjacent) but the array swap
+        // still ran, silently flipping the order back and forth on every
+        // pointermove — so wherever the drag happened to end, the array
+        // could easily land back at its original order.
+        if (deltaY > 0) {
+          const next = dragEl.nextElementSibling;
+          if (next) {
+            const nextRect = next.getBoundingClientRect();
+            const nextCenter = nextRect.top + nextRect.height / 2;
+            if (dragCenter > nextCenter) {
+              containerEl.insertBefore(dragEl, next.nextSibling);
+              swapListItems(list, dragEl.dataset.id, next.dataset.id);
+              startY = ev.clientY;
+              dragEl.style.transform = "translateY(0px)";
+            }
+          }
+        } else if (deltaY < 0) {
+          const prev = dragEl.previousElementSibling;
+          if (prev) {
+            const prevRect = prev.getBoundingClientRect();
+            const prevCenter = prevRect.top + prevRect.height / 2;
+            if (dragCenter < prevCenter) {
+              containerEl.insertBefore(dragEl, prev);
+              swapListItems(list, dragEl.dataset.id, prev.dataset.id);
+              startY = ev.clientY;
+              dragEl.style.transform = "translateY(0px)";
+            }
           }
         }
       };
