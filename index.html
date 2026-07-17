@@ -18,12 +18,13 @@
 
 <header class="app-header">
   <div id="today-label" class="today-label">Loading…</div>
-  <div id="score-label" class="score-label"><span class="icon" data-icon="medal"></span><span id="score-label-text">0 / 0 pts</span></div>
+  <div id="score-label" class="score-label">🏆 0 / 0 pts</div>
   <div class="score-bar"><div id="score-bar-fill" class="score-bar-fill"></div></div>
 </header>
 
 <nav class="tabs">
   <button class="tab-btn active" data-tab="today">Today</button>
+  <button class="tab-btn" data-tab="training">Training</button>
   <button class="tab-btn" data-tab="monthly">Monthly</button>
   <button class="tab-btn" data-tab="archive">Archive</button>
   <button class="tab-btn" data-tab="notes">Notes</button>
@@ -35,93 +36,96 @@
   <section id="tab-today" class="tab-panel active">
 
     <div class="card">
-      <h2><span class="icon" data-icon="clipboard"></span> Daily Routine Tasks</h2>
+      <h2>📋 Daily Routine Tasks</h2>
       <div id="routine-list" class="task-list"></div>
       <div class="add-row">
         <input id="add-routine-label" type="text" placeholder="New task…" />
-        <input id="add-routine-time" type="time" title="Desired completion time (optional)" />
         <input id="add-routine-points" type="number" value="5" />
         <button class="add-task-btn" data-kind="routine">+ Add</button>
       </div>
     </div>
 
     <div class="card">
-      <h2><span class="icon" data-icon="salad"></span> Healthy Meals Log</h2>
+      <h2>🥗 Healthy Meals Log</h2>
       <div id="meals-list" class="task-list"></div>
       <div class="add-row">
         <input id="add-meals-label" type="text" placeholder="New meal…" />
-        <input id="add-meals-time" type="time" title="Desired completion time (optional)" />
         <input id="add-meals-points" type="number" value="8" />
         <button class="add-task-btn" data-kind="meals">+ Add</button>
       </div>
     </div>
 
     <div class="card">
-      <h2><span class="icon" data-icon="clock"></span> Timing Tracker</h2>
+      <h2>⏰ Timing Tracker</h2>
       <p class="hint">24-hr format. Earlier sleep, and a longer gap before it for meals/gym, scores higher.</p>
       <div class="timing-row">
-        <label><span class="icon icon-sm" data-icon="moon"></span> Sleep time</label>
+        <label>🌙 Sleep time</label>
         <input type="time" id="sleep-time" />
         <span class="pt-badge" id="sleep-score">–</span>
       </div>
       <div class="timing-row">
-        <label><span class="icon icon-sm" data-icon="fork"></span> Last meal</label>
+        <label>🍽️ Last meal</label>
         <input type="time" id="last-meal-time" />
         <span class="pt-badge" id="meal-score">–</span>
       </div>
       <div class="timing-row">
-        <label><span class="icon icon-sm" data-icon="dumbbell"></span> Gym finish</label>
+        <label>💪 Gym finish</label>
         <input type="time" id="gym-finish-time" />
         <span class="pt-badge" id="gym-score">–</span>
       </div>
       <div class="timing-row">
-        <label><span class="icon icon-sm" data-icon="coffee"></span> Last coffee</label>
+        <label>☕ Last coffee</label>
         <input type="time" id="last-coffee-time" />
         <span class="pt-badge" id="coffee-score">–</span>
       </div>
       <div class="timing-row">
-        <label><span class="icon icon-sm" data-icon="noPhone"></span> No doom scrolling</label>
+        <label>📵 No doom scrolling</label>
         <input type="checkbox" id="no-scroll-check" />
       </div>
     </div>
 
     <div class="card">
-      <h2><span class="icon" data-icon="dumbbell"></span> Gym Schedule</h2>
+      <h2>🏋️ Gym Schedule</h2>
       <div id="gym-schedule-list" class="gym-list"></div>
       <p id="gym-bonus-label" class="hint"></p>
     </div>
 
     <div class="card">
-      <h2><span class="icon" data-icon="target"></span> Side Missions</h2>
+      <h2>🎯 Side Missions</h2>
       <div id="side-list" class="task-list"></div>
       <div class="add-row">
         <input id="add-side-label" type="text" placeholder="New mission…" />
-        <input id="add-side-time" type="time" title="Desired completion time (optional)" />
         <input id="add-side-points" type="number" value="5" />
         <button class="add-task-btn" data-kind="side">+ Add</button>
       </div>
-      <div class="bulk-add-row">
-        <textarea id="add-side-bulk" rows="3" placeholder="Paste multiple missions, one per line… each becomes its own mission worth +5 pts"></textarea>
-        <button id="add-side-bulk-btn" class="primary-btn"><span class="icon icon-sm" data-icon="upload"></span> Bulk Add (+5 each)</button>
-      </div>
     </div>
 
     <div class="card">
-      <h2><span class="icon" data-icon="calendar"></span> <span id="calendar-month-label">Score Calendar</span></h2>
-      <p class="hint">Tap a day to view or set a high-level plan for that date. Numbers show points earned.</p>
+      <h2 id="calendar-month-label">📅 Score Calendar</h2>
       <div id="calendar-grid" class="calendar-grid"></div>
     </div>
 
+  </section>
+
+  <!-- TRAINING TAB -->
+  <section id="tab-training" class="tab-panel">
+
     <div class="card">
-      <h2><span class="icon" data-icon="save"></span> Save / Backdate Score</h2>
-      <p class="hint">Today's cumulative score is saved to the calendar automatically. Pick an earlier date to backdate or correct a score.</p>
-      <div class="save-score-row">
-        <input type="date" id="save-score-date" />
-        <input type="number" id="save-score-earned" placeholder="Earned" />
-        <span class="save-score-sep">/</span>
-        <input type="number" id="save-score-max" placeholder="Max" />
-        <button id="save-score-btn" class="primary-btn"><span class="icon icon-sm" data-icon="save"></span> Save</button>
-      </div>
+      <div id="training-day-pills" class="day-pills"></div>
+    </div>
+
+    <div class="card" id="training-session"></div>
+
+    <div class="card">
+      <h2>🧘 Rehab &amp; Maintenance</h2>
+      <p class="hint">Daily, or before every session. 15–20 min.</p>
+      <div id="rehab-list"></div>
+    </div>
+
+    <div class="card">
+      <h2>🤸 Pancake Program <span id="pancake-suggested-badge" class="badge">suggested today</span></h2>
+      <p class="hint">3–4x per week. Best slotted after Legs A, Legs B, or Push B.</p>
+      <div id="pancake-list"></div>
     </div>
 
   </section>
@@ -129,7 +133,7 @@
   <!-- MONTHLY TAB -->
   <section id="tab-monthly" class="tab-panel">
     <div class="card">
-      <h2><span class="icon" data-icon="calendar"></span> <span id="monthly-label">Monthly Session Tracker</span></h2>
+      <h2 id="monthly-label">📅 Monthly Session Tracker</h2>
       <div id="monthly-list" class="monthly-table"></div>
       <p id="monthly-total" class="hint"></p>
     </div>
@@ -138,7 +142,7 @@
   <!-- ARCHIVE TAB -->
   <section id="tab-archive" class="tab-panel">
     <div class="card">
-      <h2><span class="icon" data-icon="archive"></span> Monthly Archive</h2>
+      <h2>🗂️ Monthly Archive</h2>
       <div id="archive-list"></div>
     </div>
   </section>
@@ -146,7 +150,7 @@
   <!-- NOTES TAB -->
   <section id="tab-notes" class="tab-panel">
     <div class="card">
-      <h2><span class="icon" data-icon="book"></span> Reference &amp; Notes</h2>
+      <h2>📚 Reference &amp; Notes</h2>
       <textarea id="notes-area" rows="20"></textarea>
     </div>
   </section>
