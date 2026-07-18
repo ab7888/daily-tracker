@@ -45,10 +45,10 @@
       <h2><span class="icon" data-icon="clipboard"></span> Daily Routine Tasks</h2>
       <div id="routine-list" class="task-list"></div>
       <div class="add-row">
-        <input id="add-routine-label" type="text" placeholder="New task…" />
-        <input id="add-routine-time" type="time" title="Desired completion time (optional)" />
-        <input id="add-routine-points" type="number" value="5" />
-        <button class="add-task-btn" data-kind="routine">+ Add</button>
+        <input id="add-routine-label" type="text" placeholder="New task…" data-enter-target="add-routine-btn" />
+        <input id="add-routine-time" type="time" title="Desired completion time (optional)" data-enter-target="add-routine-btn" />
+        <input id="add-routine-points" type="number" value="5" data-enter-target="add-routine-btn" />
+        <button id="add-routine-btn" class="add-task-btn" data-kind="routine">+ Add</button>
       </div>
     </div>
 
@@ -57,8 +57,8 @@
       <p class="hint">Queue up tasks here today — they get added to Daily Routine Tasks automatically once tomorrow actually arrives.</p>
       <div id="tomorrow-plan-list" class="task-list"></div>
       <div class="add-row">
-        <input id="add-tomorrow-label" type="text" placeholder="New task for tomorrow…" />
-        <input id="add-tomorrow-points" type="number" value="5" />
+        <input id="add-tomorrow-label" type="text" placeholder="New task for tomorrow…" data-enter-target="add-tomorrow-btn" />
+        <input id="add-tomorrow-points" type="number" value="5" data-enter-target="add-tomorrow-btn" />
         <button id="add-tomorrow-btn" class="add-task-btn">+ Add</button>
       </div>
     </div>
@@ -67,10 +67,10 @@
       <h2><span class="icon" data-icon="salad"></span> Healthy Meals Log</h2>
       <div id="meals-list" class="task-list"></div>
       <div class="add-row">
-        <input id="add-meals-label" type="text" placeholder="New meal…" />
-        <input id="add-meals-time" type="time" title="Desired completion time (optional)" />
-        <input id="add-meals-points" type="number" value="8" />
-        <button class="add-task-btn" data-kind="meals">+ Add</button>
+        <input id="add-meals-label" type="text" placeholder="New meal…" data-enter-target="add-meals-btn" />
+        <input id="add-meals-time" type="time" title="Desired completion time (optional)" data-enter-target="add-meals-btn" />
+        <input id="add-meals-points" type="number" value="8" data-enter-target="add-meals-btn" />
+        <button id="add-meals-btn" class="add-task-btn" data-kind="meals">+ Add</button>
       </div>
     </div>
 
@@ -113,10 +113,10 @@
       <h2><span class="icon" data-icon="target"></span> Side Missions</h2>
       <div id="side-list" class="task-list"></div>
       <div class="add-row">
-        <input id="add-side-label" type="text" placeholder="New mission…" />
-        <input id="add-side-time" type="time" title="Desired completion time (optional)" />
-        <input id="add-side-points" type="number" value="5" />
-        <button class="add-task-btn" data-kind="side">+ Add</button>
+        <input id="add-side-label" type="text" placeholder="New mission…" data-enter-target="add-side-btn" />
+        <input id="add-side-time" type="time" title="Desired completion time (optional)" data-enter-target="add-side-btn" />
+        <input id="add-side-points" type="number" value="5" data-enter-target="add-side-btn" />
+        <button id="add-side-btn" class="add-task-btn" data-kind="side">+ Add</button>
       </div>
       <div class="bulk-add-row">
         <textarea id="add-side-bulk" rows="3" placeholder="Paste multiple missions, one per line… each becomes its own mission worth +5 pts"></textarea>
@@ -135,9 +135,9 @@
       <p class="hint">Today's cumulative score is saved to the calendar automatically. Pick an earlier date to backdate or correct a score.</p>
       <div class="save-score-row">
         <input type="date" id="save-score-date" />
-        <input type="number" id="save-score-earned" placeholder="Earned" />
+        <input type="number" id="save-score-earned" placeholder="Earned" data-enter-target="save-score-btn" />
         <span class="save-score-sep">/</span>
-        <input type="number" id="save-score-max" placeholder="Max" />
+        <input type="number" id="save-score-max" placeholder="Max" data-enter-target="save-score-btn" />
         <button id="save-score-btn" class="primary-btn"><span class="icon icon-sm" data-icon="save"></span> Save</button>
       </div>
     </div>
@@ -174,7 +174,7 @@
       <p class="hint">A quick, unscored scratch list — separate from the Daily Routine Tasks. Whatever's on your plate right now.</p>
       <div id="right-now-list" class="task-list"></div>
       <div class="add-row">
-        <input id="add-right-now-label" type="text" placeholder="New item…" />
+        <input id="add-right-now-label" type="text" placeholder="New item…" data-enter-target="add-right-now-btn" />
         <button id="add-right-now-btn" class="add-task-btn">+ Add</button>
       </div>
     </div>
@@ -205,10 +205,10 @@
       <div id="account-logged-out">
         <p class="hint">Log in to sync your data across every device you use. The app keeps working fully offline either way — logging in just keeps every device's copy up to date.</p>
         <div class="account-field">
-          <input type="email" id="account-email" placeholder="Email" autocomplete="email" />
+          <input type="email" id="account-email" placeholder="Email" autocomplete="email" data-enter-target="account-login-btn" />
         </div>
         <div class="account-field">
-          <input type="password" id="account-password" placeholder="Password" autocomplete="current-password" />
+          <input type="password" id="account-password" placeholder="Password" autocomplete="current-password" data-enter-target="account-login-btn" />
         </div>
         <div class="account-actions">
           <button id="account-login-btn" class="primary-btn">Log In</button>

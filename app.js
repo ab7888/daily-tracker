@@ -448,10 +448,11 @@ async function pullOrSeedCloudState() {
 }
 
 // Debounced by default (rapid clicks shouldn't each fire a network request);
-// pass immediate=true for the one-off "seed the cloud" push right after login.
+// pass immediate=true for the one-off "seed the cloud" push right after login,
+// or to flush a pending change right before the page backgrounds/closes.
 function pushStateToCloud(immediate) {
   if (!supabaseClient || !currentUser) return;
-  if (cloudPushTimer) clearTimeout(cloudPushTimer);
+  if (cloudPushTimer) { clearTimeout(cloudPushTimer); cloudPushTimer = null; }
   const doPush = async () => {
     setSyncStatus("syncing");
     try {
@@ -466,8 +467,18 @@ function pushStateToCloud(immediate) {
     }
   };
   if (immediate) return doPush();
-  cloudPushTimer = setTimeout(doPush, 1500);
+  cloudPushTimer = setTimeout(doPush, 800);
 }
+
+// A debounced push scheduled just before the tab is backgrounded or closed
+// (phone locked, app switched, browser tab closed) would otherwise get
+// silently killed before its timer ever fires — the change stays on that
+// device's localStorage but never reaches the cloud, so other devices never
+// see it. Flushing immediately on these signals closes that gap.
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) pushStateToCloud(true);
+});
+window.addEventListener("pagehide", () => pushStateToCloud(true));
 
 async function signUpAccount(email, password) {
   return supabaseClient.auth.signUp({ email, password });
@@ -1424,6 +1435,19 @@ document.addEventListener("change", (e) => {
   if (t.id === "last-coffee-time") state.timing.lastCoffee = t.value;
   if (t.id === "no-scroll-check") state.timing.noScroll = t.checked;
   if (isMutating) renderAll();
+});
+
+// Enter submits the "add" row a field belongs to, same as clicking its
+// button — inputs opt in via data-enter-target="<button id>". Left off
+// textareas (e.g. the bulk-add box) so Enter there still just inserts a
+// newline.
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter") return;
+  const t = e.target;
+  if (t.tagName !== "INPUT" || !t.dataset.enterTarget) return;
+  e.preventDefault();
+  const btn = document.getElementById(t.dataset.enterTarget);
+  if (btn) btn.click();
 });
 
 function switchTab(tab) {
