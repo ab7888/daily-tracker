@@ -8,6 +8,68 @@ const STORAGE_KEY = "dailyTracker.state.v1";
 
 const DEFAULT_NOTES = "📚  REFERENCE & NOTES\n  Sections: 🧠 Mind & Mental Health Notes   |   🦴 QL Muscle Recovery Plan   |   🦶 Ankle Rehabilitation   |   💪 Strength Training Block   |   🎯 Overcoming Social Anxiety   |   🤜 Wrist Injury Recovery\n\n\n🧠  Mind & Mental Health Notes\n  🧠 2. Fixing the “Constant Brain Chatter” \n🧠 2. Fixing the “Constant Brain Chatter” \nThat nonstop mental noise you mentioned? That’s very real—and strongly linked to overstimulation. \nYour brain is used to: \nconstant input \nfast switching \nhigh dopamine spikes \nSo silence feels uncomfortable. \n🎯 Goal: \nNot “empty mind”—but quieter, more controlled thinking \n🔧 Simple System That Actually Works \n1. Daily “Mental Dump” (5–10 min) \nGrab your phone or paper and write: \neverything on your mind \nno structure, no filter \nThis clears mental backlog. \n2. Controlled Silence (Start small) \nDaily: \n5–10 minutes \nno phone, no music, no stimulation \nJust sit or walk. \n👉 At first your brain will race—that’s normal. Over time, it settles. \n3. Reduce Input Overload \nRight now: \nYouTube binge = mental chaos fuel \nBy cutting that down, you’ll notice: \nless noise \nbetter focus \nmore stable mood \n4. Focus Training \nPick ONE task daily: \nwork, reading, learning \nDo it: \nno switching \nno background noise \nEven 30–60 minutes helps rewire your attention span. \n\n\n🦴  QL Muscle Recovery Plan\n  Chronic tightness (9 months) — Comprehensive rehab protocol\nRIGHT QL RECOVERY PLAN\nChronic tightness (9 months) — Comprehensive rehab protocol\n\nWHY IT'S NOT RESOLVING\nWeak / inhibited glutes\nTight hip flexors (psoas)\nHip drop / pelvic imbalance\nSleep position\n\n⚠  RED FLAGS — SEE A PHYSIO IF:\n  •  Pain radiates down into the glute or leg (could involve lumbar spine, not just QL)\n  •  Pain is sharp or stabbing rather than tight / achy\n  •  Symptoms worsen despite 3–4 weeks of consistent rehab work\n  •  Numbness or tingling in the leg (nerve involvement)\n🥊  MUAY THAI NOTE\nCheck whether you consistently kick/knee with the right leg. Repeated hip extension under load is a direct aggravator. Balance volume between sides and prioritise post-training QL + hip flexor stretching on training days.\n\nRECOVERY TIMELINE\nPeriod\nWeek 1–2\nWeek 3–4\nWeek 5–6\nWeek 7–8\nWeek 9–12\n\n\n\n\n\n\n\n\n\n🦶  Ankle Rehabilitation\n  \nANKLE REHABILITATION PROGRAMME\nLateral ankle sprain (inversion) — Functional recovery to full loaded range-of-motion\nPhase\nPhase 1\nMobility\nPhase 2\nProprioception\nPhase 3\nStrength\nIMPORTANT NOTES\n• Phases overlap — start Phase 2 proprioception work from Week 2 once mobility is improving.\n• Pain guide: 0 = no pain, 10 = worst imaginable. Stop and rest if pain spikes above 4/10.\n• For lotus / seiza pain: use a yoga block under hips and reduce height by ~1 cm per week.\n• See a physio if lateral instability persists during cutting/side-step movements.\n• Muay Thai: shadow work and bag from Week 6 if Phase 2 goals are met. Sparring: Week 10+.\n\n\n💪  Strength Training Block\n  Front Lever · Handstand Push-Up · Leg Strength\n6-WEEK STRENGTH BLOCK — FULL PLAN\nFront Lever · Handstand Push-Up · Leg Strength\nYOUR 1RM ESTIMATES\nLift\nBarbell Overhead Press\nWeighted Pull-Up\nATG Barbell Squat\nBarbell Deadlift\nHip Thrust\nCalf Raise (endurance)\nWEEKLY SCHEDULE\nMonday\nDay 1 – Upper Push\nPROGRESSION PHASES\nPhase\nAccumulation\nIntensification\nPeak\nDeload\n\n\n🎯  Overcoming Social Anxiety\n  \nOVERCOMING SOCIAL ANXIETY\nA 6-Week Speed-Run Plan  •  From avoidance to confidence\nSocial anxiety shrinks through deliberate, repeated exposure — not willpower, not waiting to feel ready. Each week builds on the last. The goal isn't zero anxiety; it's proving to your nervous system that social situations are survivable, then normal.\nExpose Daily\nStack 2-3 micro-interactions daily — volume beats intensity\n6-WEEK PLAN AT A GLANCE\nWeek\nWeek 1\nWeek 2\nWeek 3\nWeek 4\nWeek 5\nWeek 6\nDAILY NON-NEGOTIABLES\nPhysical\nMental\nReadiness comes after action, not before.  Start today.\n\n\n🤜  Wrist Injury Recovery\n  Mechanism: Blocking kick → forceful wrist extension under load   |   Primary concern: Dorsal radiocarpal / intercarpal l\n🥊  Wrist Injury Recovery Plan  —  Muay Thai Dorsal Sprain\nMechanism: Blocking kick → forceful wrist extension under load   |   Primary concern: Dorsal radiocarpal / intercarpal ligament sprain\nPhase\nPhase 1\nAcute\nPhase 2\nSubacute\nPhase 3\nRehabilitation\nPhase 4\nReturn to\nTraining\n⚠️  SCAPHOID FRACTURE SCREENING — Check before proceeding with rehab\nTest\nAnatomical Snuffbox Test\nScaphoid Compression Test\nSwelling Pattern\nAction if suspicious\n🗓️  Wrist Recovery — Daily Tracker\nLog each day. Tick ✓ completed modalities. Rate pain 0 (none) → 10 (severe). Note ROM: Full / Partial / Limited / None in painful direction (extension).\nPHASE 1 — ACUTE (Days 1-5)\nDay\n1\n2\n3\nPHASE 2 — SUBACUTE (Days 6-14)\n4\n5\n6\n7\n8\n9\n10\n11\nPHASE 3 — REHABILITATION (Days 15-42)\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\nPHASE 4 — RETURN TO TRAINING\n39\n40\n41\n42";
 
+/* --------------------------- Custom icon set ----------------------------
+   Small hand-drawn line icons (24x24, currentColor stroke) standing in for
+   the emoji this UI used to lean on — keeps section chrome legible without
+   relying on the OS emoji font.
+   ------------------------------------------------------------------------- */
+const ICON_SVG = {
+  medal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M9 12.5 7 20l5-3 5 3-2-7.5"/></svg>',
+  clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3" rx="1"/><path d="M8.5 11l1.5 1.5L13 9"/><line x1="8.5" y1="15" x2="15.5" y2="15"/></svg>',
+  salad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a8 8 0 0 0 16 0"/><line x1="4" y1="11" x2="20" y2="11"/><line x1="9" y1="8" x2="9" y2="5"/><line x1="12" y1="8" x2="12" y2="4"/><line x1="15" y1="8" x2="15" y2="5"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>',
+  moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 12.5A7.5 7.5 0 1 1 11.5 5a6 6 0 0 0 6.5 7.5Z"/></svg>',
+  fork: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v6M10 2v6M13 2v6"/><path d="M7 8a3 3 0 0 0 6 0"/><line x1="10" y1="8" x2="10" y2="22"/></svg>',
+  dumbbell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="3" height="6" rx="1"/><rect x="19" y="9" width="3" height="6" rx="1"/><line x1="5" y1="12" x2="19" y2="12"/><rect x="6" y="7" width="2" height="10" rx="1"/><rect x="16" y="7" width="2" height="10" rx="1"/></svg>',
+  coffee: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9Z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 5c0 1-1 1-1 2M11 5c0 1-1 1-1 2"/></svg>',
+  noPhone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/><line x1="3" y1="3" x2="21" y2="21"/></svg>',
+  target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>',
+  calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>',
+  archive: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M4 9v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"/><line x1="10" y1="13" x2="14" y2="13"/></svg>',
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h6v18H6a2 2 0 0 1-2-2V5Z"/><path d="M20 5a2 2 0 0 0-2-2h-6v18h6a2 2 0 0 0 2-2V5Z"/><line x1="12" y1="3" x2="12" y2="21"/></svg>',
+  save: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M8 3v6h7V3"/><path d="M7 21v-7h10v7"/></svg>',
+  note: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="12" height="15" rx="1.5"/><line x1="7" y1="7" x2="13" y2="7"/><line x1="7" y1="10.5" x2="13" y2="10.5"/><line x1="7" y1="14" x2="10.5" y2="14"/></svg>',
+  sauna: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="3" width="4" height="12" rx="2"/><circle cx="12" cy="18" r="3"/><path d="M5 9c1 1 1 2 0 3M19 9c-1 1-1 2 0 3"/></svg>',
+  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.5" y1="4.5" x2="6.5" y2="6.5"/><line x1="17.5" y1="17.5" x2="19.5" y2="19.5"/></svg>',
+  wind: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h12a3 3 0 1 0-3-3"/><path d="M3 16h15a3 3 0 1 1-3 3"/></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1V7"/><path d="M6 7l1 13a1.5 1.5 0 0 0 1.5 1.5h7a1.5 1.5 0 0 0 1.5-1.5l1-13"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>',
+  upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>',
+  droplet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 4 6 8 6 11a6 6 0 0 1-12 0c0-3 3-7 6-11Z"/></svg>',
+  stretch: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 8v6"/><path d="M7 11l5-2 5 2"/><path d="M9 20l3-6 3 6"/></svg>',
+  foot: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="11" cy="14" rx="4" ry="7"/><circle cx="9" cy="4" r="1.2"/><circle cx="12" cy="3" r="1.2"/><circle cx="15" cy="4.5" r="1.2"/></svg>',
+  footsteps: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="7" cy="8" rx="2" ry="3.2" transform="rotate(-15 7 8)"/><ellipse cx="16" cy="15" rx="2" ry="3.2" transform="rotate(15 16 15)"/></svg>',
+  headphones: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="14" width="4" height="6" rx="1.5"/><rect x="17.5" y="14" width="4" height="6" rx="1.5"/></svg>',
+  lotus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="2"/><path d="M12 8v3"/><path d="M6 19c0-3 3-5 6-5s6 2 6 5"/><path d="M9 14l-3 3M15 14l3 3"/></svg>',
+  shower: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4a5 5 0 0 1 10 0"/><line x1="12" y1="4" x2="12" y2="2"/><rect x="5" y="4" width="14" height="4" rx="2"/><line x1="8" y1="12" x2="8" y2="14"/><line x1="12" y1="12" x2="12" y2="14"/><line x1="16" y1="12" x2="16" y2="14"/><line x1="8" y1="17" x2="8" y2="19"/><line x1="12" y1="17" x2="12" y2="19"/><line x1="16" y1="17" x2="16" y2="19"/></svg>',
+  pill: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 17.5a5 5 0 0 1 0-7l4-4a5 5 0 0 1 7 7l-4 4a5 5 0 0 1-7 0Z"/><line x1="10" y1="10" x2="14" y2="14"/></svg>',
+  sparkle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></svg>',
+  brain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="10" r="4"/><circle cx="14" cy="8" r="5"/><circle cx="17" cy="12.5" r="3"/><circle cx="6.5" cy="19" r="1.2"/><circle cx="4" cy="22" r="0.8"/></svg>',
+  flame: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2 3-1 4-1 7a3 3 0 0 0 6 0c0-1-.5-2-1-3 1 .5 2 2 2 4a6 6 0 0 1-12 0c0-4 3-5 3-8 1 1 2 1 3 0Z"/></svg>',
+  pot: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16"/><path d="M5 11v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/><path d="M9 11V8a3 3 0 0 1 6 0v3"/><line x1="12" y1="5" x2="12" y2="3"/></svg>',
+  inhaler: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="8" height="12" rx="2"/><path d="M10 8V5a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v3"/><line x1="10" y1="20" x2="10" y2="22"/><line x1="14" y1="20" x2="14" y2="22"/></svg>',
+  plate: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg>',
+  undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h11a5 5 0 0 1 0 10h-2"/><path d="M9 6 4 11l5 5"/></svg>',
+  pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6.1-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.9-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.2"/></svg>',
+  split: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v6"/><path d="M12 10 4 20"/><path d="M12 10l8 10"/></svg>',
+  checkCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>',
+  listChecks: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5 5.5 8 8 5"/><line x1="11" y1="6.5" x2="20" y2="6.5"/><path d="M4 12.5 5.5 14 8 11"/><line x1="11" y1="12.5" x2="20" y2="12.5"/><path d="M4 18.5 5.5 20 8 17"/><line x1="11" y1="18.5" x2="20" y2="18.5"/></svg>',
+  sunrise: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18a7 7 0 0 1 14 0"/><line x1="2" y1="18" x2="22" y2="18"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="4.5" y1="9" x2="7" y2="10.5"/><line x1="19.5" y1="9" x2="17" y2="10.5"/></svg>',
+  cloud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 8.5a4 4 0 0 1-.7 7.94"/><path d="M16.3 16.44H7"/></svg>'
+};
+
+function injectIcons() {
+  $$("[data-icon]").forEach((el) => {
+    const svg = ICON_SVG[el.dataset.icon];
+    if (svg) el.innerHTML = svg;
+  });
+}
+
+// Inline icon markup for templates built via innerHTML at render time
+// (as opposed to the static [data-icon] placeholders injectIcons fills once).
+function iconTag(name, extraClass) {
+  return `<span class="icon icon-sm${extraClass ? " " + extraClass : ""}">${ICON_SVG[name] || ""}</span>`;
+}
+
 const GYM_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
@@ -157,42 +219,45 @@ function defaultState() {
     version: 2,
     currentDate: today,
     routineTasks: [
-      ["🧴 Face Routine (AM)", 5],
-      ["🧘 Stretch", 8],
-      ["🦶 Ankle Training", 5],
-      ["🚶 Walk / Steps", 10],
-      ["📚 Audiobook", 4],
-      ["🧘 Meditate", 12],
-      ["🚿 Shower", 5],
-      ["💊 Supplements", 5],
-      ["🧹 Clean", 5],
-      ["🚶 QL Recovery", 5],
-      ["📵 Relapse", -80],
-      ["🧠 Mental dump + Controlled silence", 10],
-      ["💪 Gym Session", 15],
-      ["🧴 Face Routine (PM)", 5],
-      ["📚 Language learning", 10],
-      ["🧠 Respondent surveys", 5],
-      ["😤 Face your fears", 10],
-      ["🌙 Evening Wind Down", 5],
-      ["👨‍🍳 Meal prep", 8],
-      ["🧴 Asthma Inhaler", 6],
-      ["Water Floss", 2]
-    ].map(([label, points]) => ({ id: uid(), label, points, done: false })),
+      ["Face Routine (AM)", 5, "droplet"],
+      ["Stretch", 8, "stretch"],
+      ["Ankle Training", 5, "foot"],
+      ["Walk / Steps", 10, "footsteps"],
+      ["Audiobook", 4, "headphones"],
+      ["Meditate", 12, "lotus"],
+      ["Shower", 5, "shower"],
+      ["Supplements", 5, "pill"],
+      ["Clean", 5, "sparkle"],
+      ["QL Recovery", 5, "footsteps"],
+      ["Relapse", -80, "noPhone"],
+      ["Mental dump + Controlled silence", 10, "brain"],
+      ["Gym Session", 15, "dumbbell"],
+      ["Face Routine (PM)", 5, "droplet"],
+      ["Language learning", 10, "book"],
+      ["Respondent surveys", 5, "brain"],
+      ["Face your fears", 10, "flame"],
+      ["Evening Wind Down", 5, "moon"],
+      ["Meal prep", 8, "pot"],
+      ["Asthma Inhaler", 6, "inhaler"],
+      ["Water Floss", 2, ""]
+    ].map(([label, points, icon]) => ({ id: uid(), label, points, done: false, time: "", icon })),
     meals: [
-      ["🥩 Healthy Meal 1", 8],
-      ["🥦 Healthy Meal 2", 8],
-      ["🫠 Healthy Meal 3", 8],
-      ["🥦 No Junk Food?", 8]
-    ].map(([label, points]) => ({ id: uid(), label, points, done: false })),
+      ["Healthy Meal 1", 8, "plate"],
+      ["Healthy Meal 2", 8, "plate"],
+      ["Healthy Meal 3", 8, "plate"],
+      ["No Junk Food?", 8, "salad"]
+    ].map(([label, points, icon]) => ({ id: uid(), label, points, done: false, time: "", icon })),
     timing: { sleep: "", lastMeal: "", gymFinish: "", lastCoffee: "", noScroll: false },
     gymSchedule: GYM_DAYS.map((day) => ({ day, done: false })),
     sideMissions: [
-      ["Shave", 5],
-      ["Make bed", 5]
-    ].map(([label, points]) => ({ id: uid(), label, points, done: false })),
+      ["Shave", 5, ""],
+      ["Make bed", 5, ""]
+    ].map(([label, points, icon]) => ({ id: uid(), label, points, done: false, time: "", icon })),
     training: { done: {}, rehabDone: {}, pancakeDone: {} },
     dailyLog: {},
+    dayPlans: {},
+    tomorrowPlan: [],
+    rightNow: [],
     monthly: {
       year: d.getFullYear(),
       month: d.getMonth() + 1, // 1-12
@@ -201,6 +266,52 @@ function defaultState() {
     archive: [],
     notes: DEFAULT_NOTES
   };
+}
+
+// Maps an already-saved task's exact old (emoji-prefixed) label to its new
+// icon-based label/icon — lets loadState() upgrade a device's saved tasks
+// in place without touching anything the user has renamed or added.
+const ROUTINE_ICON_MIGRATIONS = {
+  "🧴 Face Routine (AM)": { label: "Face Routine (AM)", icon: "droplet" },
+  "🧘 Stretch": { label: "Stretch", icon: "stretch" },
+  "🦶 Ankle Training": { label: "Ankle Training", icon: "foot" },
+  "🚶 Walk / Steps": { label: "Walk / Steps", icon: "footsteps" },
+  "📚 Audiobook": { label: "Audiobook", icon: "headphones" },
+  "🧘 Meditate": { label: "Meditate", icon: "lotus" },
+  "🚿 Shower": { label: "Shower", icon: "shower" },
+  "💊 Supplements": { label: "Supplements", icon: "pill" },
+  "🧹 Clean": { label: "Clean", icon: "sparkle" },
+  "🚶 QL Recovery": { label: "QL Recovery", icon: "footsteps" },
+  "📵 Relapse": { label: "Relapse", icon: "noPhone" },
+  "🧠 Mental dump + Controlled silence": { label: "Mental dump + Controlled silence", icon: "brain" },
+  "💪 Gym Session": { label: "Gym Session", icon: "dumbbell" },
+  "🧴 Face Routine (PM)": { label: "Face Routine (PM)", icon: "droplet" },
+  "📚 Language learning": { label: "Language learning", icon: "book" },
+  "🧠 Respondent surveys": { label: "Respondent surveys", icon: "brain" },
+  "😤 Face your fears": { label: "Face your fears", icon: "flame" },
+  "🌙 Evening Wind Down": { label: "Evening Wind Down", icon: "moon" },
+  "👨‍🍳 Meal prep": { label: "Meal prep", icon: "pot" },
+  "🧴 Asthma Inhaler": { label: "Asthma Inhaler", icon: "inhaler" }
+};
+
+const MEALS_ICON_MIGRATIONS = {
+  "🥩 Healthy Meal 1": { label: "Healthy Meal 1", icon: "plate" },
+  "🥦 Healthy Meal 2": { label: "Healthy Meal 2", icon: "plate" },
+  "🫠 Healthy Meal 3": { label: "Healthy Meal 3", icon: "plate" },
+  "🥦 No Junk Food?": { label: "No Junk Food?", icon: "salad" }
+};
+
+function migrateTaskIcons(list, map) {
+  if (!Array.isArray(list)) return;
+  list.forEach((t) => {
+    const m = map[t.label];
+    if (m && !t.icon) {
+      t.label = m.label;
+      t.icon = m.icon;
+    }
+    if (t.time === undefined) t.time = "";
+    if (t.icon === undefined) t.icon = "";
+  });
 }
 
 function todayISO(date) {
@@ -226,7 +337,8 @@ function loadState() {
     const merged = Object.assign({}, base, parsed, {
       timing: Object.assign({}, base.timing, parsed.timing),
       monthly: Object.assign({}, base.monthly, parsed.monthly),
-      training: Object.assign({}, base.training, parsed.training)
+      training: Object.assign({}, base.training, parsed.training),
+      dayPlans: Object.assign({}, base.dayPlans, parsed.dayPlans)
     });
     // Gym schedule day *labels* always come fresh from the current program —
     // only the per-day "done" flags are worth keeping from a save.
@@ -236,6 +348,9 @@ function loadState() {
         done: !!(parsed.gymSchedule[i] && parsed.gymSchedule[i].done)
       }));
     }
+    migrateTaskIcons(merged.routineTasks, ROUTINE_ICON_MIGRATIONS);
+    migrateTaskIcons(merged.meals, MEALS_ICON_MIGRATIONS);
+    migrateTaskIcons(merged.sideMissions, {});
     return merged;
   } catch (e) {
     console.error("Failed to parse saved state, starting fresh.", e);
@@ -252,6 +367,31 @@ let state = loadState();
 // Which day's session is currently being viewed in the Training tab.
 // Not persisted — always opens on today when the app is reloaded.
 let trainingViewDay = todayDayIdx();
+
+/* -------------------------------- Undo ----------------------------------- */
+// In-memory only (cleared on reload) — a snapshot of `state` is pushed right
+// before each user-initiated mutation, so Undo just pops the last one back.
+
+let undoStack = [];
+const UNDO_LIMIT = 30;
+
+function pushUndo() {
+  undoStack.push(JSON.stringify(state));
+  if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+  updateUndoButton();
+}
+
+function undoLastAction() {
+  if (undoStack.length === 0) return;
+  state = JSON.parse(undoStack.pop());
+  renderAll();
+  updateUndoButton();
+}
+
+function updateUndoButton() {
+  const btn = $("#undo-btn");
+  if (btn) btn.disabled = undoStack.length === 0;
+}
 
 /* ---------------------------- Scoring logic ---------------------------- */
 
@@ -370,6 +510,15 @@ function checkRollover() {
   state.timing = { sleep: "", lastMeal: "", gymFinish: "", lastCoffee: "", noScroll: false };
   state.training = { done: {}, rehabDone: {}, pancakeDone: {} };
 
+  // Anything queued in "Plan for Tomorrow" becomes part of the Daily Routine
+  // Tasks now that tomorrow has arrived, then the queue clears.
+  if (state.tomorrowPlan.length > 0) {
+    state.tomorrowPlan.forEach((p) => {
+      state.routineTasks.push({ id: uid(), label: p.label, points: p.points, done: false, time: "", icon: "" });
+    });
+    state.tomorrowPlan = [];
+  }
+
   state.currentDate = today;
   trainingViewDay = todayDayIdx();
   saveState();
@@ -417,7 +566,11 @@ function renderAll() {
   renderMonthly();
   renderArchive();
   renderTraining();
+  renderSaveScore();
+  renderRightNow();
+  renderTomorrowPlan();
   $("#notes-area").value = state.notes;
+  updateUndoButton();
   saveState();
 }
 
@@ -427,7 +580,7 @@ function renderHeader() {
   const dayName = d.toLocaleDateString(undefined, { weekday: "long" });
   const dateStr = d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" });
   $("#today-label").textContent = `${dayName} ${dateStr}`;
-  $("#score-label").textContent = `🏆 ${totals.earned} / ${totals.max} pts`;
+  $("#score-label-text").textContent = `${totals.earned} / ${totals.max} pts`;
   const pct = totals.max > 0 ? Math.max(0, Math.min(100, (totals.earned / totals.max) * 100)) : 0;
   $("#score-bar-fill").style.width = pct + "%";
 }
@@ -443,10 +596,12 @@ function renderTaskSection(listId, tasks, kind, reorderable) {
     row.innerHTML = `
       ${reorderable ? `<span class="drag-handle" aria-label="drag to reorder"><svg viewBox="0 0 16 16" width="14" height="14"><circle cx="4" cy="3" r="1.4"/><circle cx="4" cy="8" r="1.4"/><circle cx="4" cy="13" r="1.4"/><circle cx="10" cy="3" r="1.4"/><circle cx="10" cy="8" r="1.4"/><circle cx="10" cy="13" r="1.4"/></svg></span>` : ""}
       <button class="check-btn" data-kind="${kind}" data-id="${t.id}" aria-label="toggle">${t.done ? "✓" : "✗"}</button>
+      ${t.icon ? iconTag(t.icon) : ""}
       <span class="task-label" data-kind="${kind}" data-id="${t.id}">${esc(t.label)}</span>
+      <input type="time" class="task-time" data-kind="${kind}" data-id="${t.id}" value="${t.time || ""}" title="Desired completion time" />
       <span class="task-points ${t.points < 0 ? "neg" : ""}" data-kind="${kind}" data-id="${t.id}">${t.points > 0 ? "+" : ""}${t.points}</span>
       <button class="icon-btn edit-btn" data-kind="${kind}" data-id="${t.id}" aria-label="edit">✎</button>
-      <button class="icon-btn del-btn" data-kind="${kind}" data-id="${t.id}" aria-label="delete">🗑</button>
+      <button class="icon-btn del-btn" data-kind="${kind}" data-id="${t.id}" aria-label="delete">${iconTag("trash")}</button>
     `;
     el.appendChild(row);
   });
@@ -472,6 +627,7 @@ function attachDragHandlers(containerEl, kind) {
 
     handle.addEventListener("pointerdown", (e) => {
       e.preventDefault();
+      pushUndo();
       const dragEl = row;
       const list = getList(kind);
       let startY = e.clientY;
@@ -603,15 +759,23 @@ function renderCalendar() {
     const iso = todayISO(new Date(year, month, day));
     const cell = document.createElement("div");
     cell.className = "cal-cell";
+    cell.dataset.date = iso;
     let entry = state.dailyLog[iso];
     if (iso === todayISO()) entry = { earned: totals.earned, max: totals.max };
+    let ptsHtml = "";
+    const titleParts = [];
     if (entry && entry.max > 0) {
       const pct = Math.max(0, Math.min(1, entry.earned / entry.max));
       cell.style.background = heatColor(pct);
-      cell.title = `${entry.earned} / ${entry.max} pts`;
+      ptsHtml = `<span class="cal-cell-pts">${entry.earned}</span>`;
+      titleParts.push(`${entry.earned} / ${entry.max} pts`);
     }
+    const plan = state.dayPlans[iso];
+    const planMark = plan ? `<span class="cal-cell-plan">${ICON_SVG.note}</span>` : "";
+    if (plan) titleParts.push(`Plan: ${plan}`);
+    cell.title = titleParts.join(" — ");
     if (iso === todayISO()) cell.classList.add("today");
-    cell.innerHTML = `<span>${day}</span>`;
+    cell.innerHTML = `<span class="cal-cell-day">${day}</span>${ptsHtml}${planMark}`;
     el.appendChild(cell);
   }
 }
@@ -633,7 +797,7 @@ function renderMonthly() {
   let totalPts = 0;
   const header = document.createElement("div");
   header.className = "monthly-row monthly-header";
-  header.innerHTML = `<span>DATE</span><span>💪 GYM</span><span>🧖 SAUNA</span><span>🔴 RED LIGHT</span><span>💨 HBOT</span><span>PTS</span>`;
+  header.innerHTML = `<span>DATE</span><span>${iconTag("dumbbell")} GYM</span><span>${iconTag("sauna")} SAUNA</span><span>${iconTag("sun")} RED LIGHT</span><span>${iconTag("wind")} HBOT</span><span>PTS</span>`;
   el.appendChild(header);
   for (let day = 1; day <= daysInMonth; day++) {
     const key = String(day);
@@ -669,8 +833,72 @@ function renderArchive() {
     row.className = "archive-row";
     row.innerHTML = `
       <strong>${esc(a.label)}</strong>
-      <span>💪 ${a.gym} &nbsp; 🧖 ${a.sauna} &nbsp; 🔴 ${a.redlight} &nbsp; 💨 ${a.hbot}</span>
+      <span>${iconTag("dumbbell")} ${a.gym} &nbsp; ${iconTag("sauna")} ${a.sauna} &nbsp; ${iconTag("sun")} ${a.redlight} &nbsp; ${iconTag("wind")} ${a.hbot}</span>
       <span>Total: ${a.totalPts} pts &middot; Best day: ${a.bestDay} pts</span>
+    `;
+    el.appendChild(row);
+  });
+}
+
+/* --------------------------- Save / Backdate Score ------------------------ */
+// Keeps the Save/Backdate Score inputs in sync: live totals while the
+// selected date is today (read-only, since that's always the current
+// running score), editable and untouched otherwise so a backdate-in-
+// progress doesn't get clobbered by unrelated renders.
+function applySaveScoreToday(dateInput, earnedInput, maxInput) {
+  const isToday = dateInput.value === todayISO();
+  earnedInput.readOnly = isToday;
+  maxInput.readOnly = isToday;
+  if (isToday) {
+    const totals = computeTotals(state);
+    earnedInput.value = totals.earned;
+    maxInput.value = totals.max;
+  }
+  return isToday;
+}
+
+function renderSaveScore() {
+  const dateInput = $("#save-score-date");
+  if (!dateInput) return;
+  if (!dateInput.value) dateInput.value = todayISO();
+  applySaveScoreToday(dateInput, $("#save-score-earned"), $("#save-score-max"));
+}
+
+/* -------------------------------- Right Now -------------------------------- */
+// A separate, unscored scratch checklist — for whatever's on your plate right
+// now, independent of the scored Daily Routine Tasks.
+
+function renderRightNow() {
+  const el = $("#right-now-list");
+  if (!el) return;
+  el.innerHTML = "";
+  state.rightNow.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "task-row" + (item.done ? " done" : "");
+    row.innerHTML = `
+      <button class="check-btn" data-right-now-id="${item.id}" aria-label="toggle">${item.done ? "✓" : "✗"}</button>
+      <span class="task-label">${esc(item.label)}</span>
+      <button class="icon-btn del-btn" data-right-now-del="${item.id}" aria-label="delete">${iconTag("trash")}</button>
+    `;
+    el.appendChild(row);
+  });
+}
+
+/* ----------------------------- Plan for Tomorrow --------------------------- */
+// Jot down tasks for tomorrow's Daily Routine Tasks today — they auto-feed
+// into the real list the moment the date actually rolls over (checkRollover).
+
+function renderTomorrowPlan() {
+  const el = $("#tomorrow-plan-list");
+  if (!el) return;
+  el.innerHTML = "";
+  state.tomorrowPlan.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "task-row";
+    row.innerHTML = `
+      <span class="task-label">${esc(item.label)}</span>
+      <span class="task-points ${item.points < 0 ? "neg" : ""}">${item.points > 0 ? "+" : ""}${item.points}</span>
+      <button class="icon-btn del-btn" data-tomorrow-del="${item.id}" aria-label="delete">${iconTag("trash")}</button>
     `;
     el.appendChild(row);
   });
@@ -713,18 +941,18 @@ function renderTraining() {
   const sessionEl = $("#training-session");
   if (!session) {
     sessionEl.innerHTML = `
-      <h2>🌙 Rest Day</h2>
+      <h2>${iconTag("moon")} Rest Day</h2>
       <p class="hint">No lifting session scheduled${trainingViewDay === todayIdx ? " today" : ""}. Good day for the Pancake Program below, or just recover.</p>
     `;
   } else {
     const isToday = trainingViewDay === todayIdx;
     const doneCount = session.exercises.filter((_, i) => state.training.done[exerciseId(session.key, i)]).length;
     sessionEl.innerHTML = `
-      <h2>${isToday ? "📌 Today: " : ""}${esc(session.title)}</h2>
+      <h2>${isToday ? iconTag("pin") + " Today: " : ""}${esc(session.title)}</h2>
       <p class="hint">${esc(session.focus)}</p>
       <p class="hint">${doneCount} / ${session.exercises.length} logged</p>
       <div id="training-exercise-list"></div>
-      <button class="add-task-btn" id="training-complete-all" style="margin-top:10px;">✓ Mark all complete</button>
+      <button class="add-task-btn" id="training-complete-all" style="margin-top:10px;">${iconTag("checkCircle")} Mark all complete</button>
     `;
     const listEl = $("#training-exercise-list", sessionEl);
     session.exercises.forEach((ex, i) => {
@@ -765,7 +993,13 @@ function getList(kind) {
 document.addEventListener("click", (e) => {
   const t = e.target.closest("button") || e.target;
 
+  if (t.id === "undo-btn") {
+    undoLastAction();
+    return;
+  }
+
   if (t.classList.contains("check-btn") && t.dataset.kind) {
+    pushUndo();
     const list = getList(t.dataset.kind);
     const item = list.find((x) => x.id === t.dataset.id);
     if (item) item.done = !item.done;
@@ -773,10 +1007,12 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  if (t.classList.contains("del-btn")) {
+  if (t.classList.contains("del-btn") && t.dataset.kind) {
+    if (!confirm("Delete this task?")) return;
+    pushUndo();
     const list = getList(t.dataset.kind);
     const idx = list.findIndex((x) => x.id === t.dataset.id);
-    if (idx > -1 && confirm("Delete this task?")) list.splice(idx, 1);
+    if (idx > -1) list.splice(idx, 1);
     renderAll();
     return;
   }
@@ -790,6 +1026,7 @@ document.addEventListener("click", (e) => {
     const newPoints = prompt("Points (use a negative number for a penalty):", item.points);
     if (newPoints === null) return;
     const n = Number(newPoints);
+    pushUndo();
     item.label = newLabel.trim() || item.label;
     if (!Number.isNaN(n)) item.points = n;
     renderAll();
@@ -797,6 +1034,7 @@ document.addEventListener("click", (e) => {
   }
 
   if (t.id && t.id.startsWith("gym-done-")) {
+    pushUndo();
     const idx = Number(t.dataset.idx);
     state.gymSchedule[idx].done = !state.gymSchedule[idx].done;
     renderAll();
@@ -804,6 +1042,7 @@ document.addEventListener("click", (e) => {
   }
 
   if (t.dataset && t.dataset.field && t.dataset.day) {
+    pushUndo();
     const day = t.dataset.day;
     const field = t.dataset.field;
     if (!state.monthly.days[day]) state.monthly.days[day] = { gym: false, sauna: false, redlight: false, hbot: false };
@@ -816,13 +1055,29 @@ document.addEventListener("click", (e) => {
     const kind = t.dataset.kind;
     const list = getList(kind);
     const labelInput = $(`#add-${kind}-label`);
+    const timeInput = $(`#add-${kind}-time`);
     const pointsInput = $(`#add-${kind}-points`);
     const label = labelInput.value.trim();
     const points = Number(pointsInput.value);
     if (!label || Number.isNaN(points)) return;
-    list.push({ id: uid(), label, points, done: false });
+    pushUndo();
+    list.push({ id: uid(), label, points, done: false, time: timeInput ? timeInput.value : "", icon: "" });
     labelInput.value = "";
     pointsInput.value = "5";
+    if (timeInput) timeInput.value = "";
+    renderAll();
+    return;
+  }
+
+  if (t.id === "add-side-bulk-btn") {
+    const textarea = $("#add-side-bulk");
+    const lines = textarea.value.split("\n").map((l) => l.trim()).filter(Boolean);
+    if (lines.length === 0) return;
+    pushUndo();
+    lines.forEach((label) => {
+      state.sideMissions.push({ id: uid(), label, points: 5, done: false, time: "", icon: "" });
+    });
+    textarea.value = "";
     renderAll();
     return;
   }
@@ -840,6 +1095,7 @@ document.addEventListener("click", (e) => {
   }
 
   if (t.dataset && t.dataset.trainingId) {
+    pushUndo();
     const id = t.dataset.trainingId;
     state.training.done[id] = !state.training.done[id];
     // Nice-to-have: once every exercise in *today's* session is logged,
@@ -857,6 +1113,7 @@ document.addEventListener("click", (e) => {
   }
 
   if (t.dataset && t.dataset.rehabIdx) {
+    pushUndo();
     const idx = Number(t.dataset.rehabIdx);
     state.training.rehabDone[idx] = !state.training.rehabDone[idx];
     renderAll();
@@ -864,6 +1121,7 @@ document.addEventListener("click", (e) => {
   }
 
   if (t.dataset && t.dataset.pancakeIdx) {
+    pushUndo();
     const idx = Number(t.dataset.pancakeIdx);
     state.training.pancakeDone[idx] = !state.training.pancakeDone[idx];
     renderAll();
@@ -871,6 +1129,7 @@ document.addEventListener("click", (e) => {
   }
 
   if (t.id === "training-complete-all") {
+    pushUndo();
     const session = sessionForDay(trainingViewDay);
     if (session) {
       session.exercises.forEach((_, i) => { state.training.done[exerciseId(session.key, i)] = true; });
@@ -880,17 +1139,121 @@ document.addEventListener("click", (e) => {
     renderAll();
     return;
   }
+
+  const calCell = t.closest && t.closest(".cal-cell");
+  if (calCell && calCell.dataset.date) {
+    const iso = calCell.dataset.date;
+    const dateObj = new Date(iso + "T00:00:00");
+    const label = dateObj.toLocaleDateString(undefined, { weekday: "long", day: "2-digit", month: "short" });
+    const existing = state.dayPlans[iso] || "";
+    const plan = prompt(`High-level plan for ${label}:`, existing);
+    if (plan === null) return;
+    pushUndo();
+    if (plan.trim()) state.dayPlans[iso] = plan.trim();
+    else delete state.dayPlans[iso];
+    renderAll();
+    return;
+  }
+
+  if (t.id === "save-score-btn") {
+    const date = $("#save-score-date").value || todayISO();
+    const earned = Number($("#save-score-earned").value);
+    const max = Number($("#save-score-max").value);
+    if (Number.isNaN(earned) || Number.isNaN(max) || max < 0) {
+      alert("Enter valid earned and max point values.");
+      return;
+    }
+    pushUndo();
+    state.dailyLog[date] = { earned, max };
+    renderAll();
+    return;
+  }
+
+  if (t.dataset && t.dataset.rightNowId) {
+    pushUndo();
+    const item = state.rightNow.find((x) => x.id === t.dataset.rightNowId);
+    if (item) item.done = !item.done;
+    renderAll();
+    return;
+  }
+
+  if (t.dataset && t.dataset.rightNowDel) {
+    if (!confirm("Delete this item?")) return;
+    pushUndo();
+    const idx = state.rightNow.findIndex((x) => x.id === t.dataset.rightNowDel);
+    if (idx > -1) state.rightNow.splice(idx, 1);
+    renderAll();
+    return;
+  }
+
+  if (t.id === "add-right-now-btn") {
+    const input = $("#add-right-now-label");
+    const label = input.value.trim();
+    if (!label) return;
+    pushUndo();
+    state.rightNow.push({ id: uid(), label, done: false });
+    input.value = "";
+    renderAll();
+    return;
+  }
+
+  if (t.dataset && t.dataset.tomorrowDel) {
+    pushUndo();
+    const idx = state.tomorrowPlan.findIndex((x) => x.id === t.dataset.tomorrowDel);
+    if (idx > -1) state.tomorrowPlan.splice(idx, 1);
+    renderAll();
+    return;
+  }
+
+  if (t.id === "add-tomorrow-btn") {
+    const labelInput = $("#add-tomorrow-label");
+    const pointsInput = $("#add-tomorrow-points");
+    const label = labelInput.value.trim();
+    const points = Number(pointsInput.value);
+    if (!label || Number.isNaN(points)) return;
+    pushUndo();
+    state.tomorrowPlan.push({ id: uid(), label, points });
+    labelInput.value = "";
+    pointsInput.value = "5";
+    renderAll();
+    return;
+  }
 });
 
 document.addEventListener("change", (e) => {
   const t = e.target;
+
+  if (t.id === "save-score-date") {
+    const earnedInput = $("#save-score-earned");
+    const maxInput = $("#save-score-max");
+    const isToday = applySaveScoreToday(t, earnedInput, maxInput);
+    if (!isToday) {
+      const existing = state.dailyLog[t.value];
+      earnedInput.value = existing ? existing.earned : "";
+      maxInput.value = existing ? existing.max : "";
+    }
+    return;
+  }
+
+  if (t.classList.contains("task-time")) {
+    pushUndo();
+    const list = getList(t.dataset.kind);
+    const item = list.find((x) => x.id === t.dataset.id);
+    if (item) item.time = t.value;
+    renderAll();
+    return;
+  }
+
+  const isMutating = ["sleep-time", "last-meal-time", "gym-finish-time", "last-coffee-time", "no-scroll-check", "notes-area"].includes(t.id);
+  if (isMutating) pushUndo();
+
   if (t.id === "sleep-time") state.timing.sleep = t.value;
   if (t.id === "last-meal-time") state.timing.lastMeal = t.value;
   if (t.id === "gym-finish-time") state.timing.gymFinish = t.value;
   if (t.id === "last-coffee-time") state.timing.lastCoffee = t.value;
   if (t.id === "no-scroll-check") state.timing.noScroll = t.checked;
   if (t.id === "notes-area") state.notes = t.value;
-  renderAll();
+  if (isMutating) renderAll();
 });
 
 function switchTab(tab) {
@@ -900,6 +1263,7 @@ function switchTab(tab) {
 
 /* -------------------------------- Boot ----------------------------------- */
 
+injectIcons();
 renderAll();
 
 // Re-check for a date rollover periodically, in case the app is left open
