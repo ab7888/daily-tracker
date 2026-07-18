@@ -360,9 +360,150 @@ function loadState() {
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  pushStateToCloud();
 }
 
 let state = loadState();
+
+/* ------------------------------- Cloud Sync -------------------------------
+   Optional: syncs `state` to Supabase when logged in, so it carries over
+   between devices. Works fully offline / logged-out too — everything above
+   this point already round-trips through localStorage on its own.
+   ------------------------------------------------------------------------- */
+
+const SUPABASE_URL = "https://ogakjdqgwwtgwfvetgnq.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_J--TUohNkNVSsmKbBsxiyg_7Jj0X7IX";
+
+const supabaseClient = (window.supabase && window.supabase.createClient)
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+let currentUser = null;
+let cloudPushTimer = null;
+let syncStatus = "offline"; // offline | idle | syncing | synced | error
+
+function setSyncStatus(s) {
+  syncStatus = s;
+  renderAccount();
+}
+
+async function initAuth() {
+  if (!supabaseClient) return;
+  setSyncStatus("idle");
+  const { data } = await supabaseClient.auth.getSession();
+  currentUser = data.session ? data.session.user : null;
+  renderAccount();
+  if (currentUser) await pullOrSeedCloudState();
+
+  supabaseClient.auth.onAuthStateChange(async (event, session) => {
+    currentUser = session ? session.user : null;
+    renderAccount();
+    if (event === "SIGNED_IN") await pullOrSeedCloudState();
+  });
+}
+
+// Reapplies the same forward-compat merge/migration loadState() does for a
+// freshly-parsed blob, so a state pulled from the cloud gets the same
+// treatment as one loaded from localStorage.
+function normalizeIncomingState(raw) {
+  const base = defaultState();
+  const merged = Object.assign({}, base, raw, {
+    timing: Object.assign({}, base.timing, raw.timing),
+    monthly: Object.assign({}, base.monthly, raw.monthly),
+    training: Object.assign({}, base.training, raw.training),
+    dayPlans: Object.assign({}, base.dayPlans, raw.dayPlans)
+  });
+  if (Array.isArray(raw.gymSchedule)) {
+    merged.gymSchedule = GYM_DAYS.map((day, i) => ({
+      day,
+      done: !!(raw.gymSchedule[i] && raw.gymSchedule[i].done)
+    }));
+  }
+  migrateTaskIcons(merged.routineTasks, ROUTINE_ICON_MIGRATIONS);
+  migrateTaskIcons(merged.meals, MEALS_ICON_MIGRATIONS);
+  migrateTaskIcons(merged.sideMissions, {});
+  return merged;
+}
+
+async function pullOrSeedCloudState() {
+  if (!supabaseClient || !currentUser) return;
+  setSyncStatus("syncing");
+  try {
+    const { data, error } = await supabaseClient
+      .from("daily_tracker_state")
+      .select("state")
+      .eq("user_id", currentUser.id)
+      .maybeSingle();
+    if (error) throw error;
+    if (data && data.state) {
+      state = normalizeIncomingState(data.state);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      renderAll();
+    } else {
+      // No cloud copy yet for this account — seed it with what's on this device.
+      await pushStateToCloud(true);
+    }
+    setSyncStatus("synced");
+  } catch (err) {
+    console.error("Cloud pull failed", err);
+    setSyncStatus("error");
+  }
+}
+
+// Debounced by default (rapid clicks shouldn't each fire a network request);
+// pass immediate=true for the one-off "seed the cloud" push right after login.
+function pushStateToCloud(immediate) {
+  if (!supabaseClient || !currentUser) return;
+  if (cloudPushTimer) clearTimeout(cloudPushTimer);
+  const doPush = async () => {
+    setSyncStatus("syncing");
+    try {
+      const { error } = await supabaseClient
+        .from("daily_tracker_state")
+        .upsert({ user_id: currentUser.id, state, updated_at: new Date().toISOString() });
+      if (error) throw error;
+      setSyncStatus("synced");
+    } catch (err) {
+      console.error("Cloud push failed", err);
+      setSyncStatus("error");
+    }
+  };
+  if (immediate) return doPush();
+  cloudPushTimer = setTimeout(doPush, 1500);
+}
+
+async function signUpAccount(email, password) {
+  return supabaseClient.auth.signUp({ email, password });
+}
+
+async function logInAccount(email, password) {
+  return supabaseClient.auth.signInWithPassword({ email, password });
+}
+
+async function logOutAccount() {
+  await supabaseClient.auth.signOut();
+  currentUser = null;
+  setSyncStatus("offline");
+}
+
+function renderAccount() {
+  const loggedOutEl = $("#account-logged-out");
+  const loggedInEl = $("#account-logged-in");
+  if (!loggedOutEl || !loggedInEl) return;
+  if (currentUser) {
+    loggedOutEl.style.display = "none";
+    loggedInEl.style.display = "block";
+    $("#account-email-display").textContent = currentUser.email;
+    const statusText = {
+      idle: "Not synced yet", syncing: "Syncing…", synced: "Synced",
+      error: "Sync error — will retry on your next change", offline: "Offline"
+    }[syncStatus] || "";
+    $("#account-sync-status").textContent = statusText;
+  } else {
+    loggedOutEl.style.display = "block";
+    loggedInEl.style.display = "none";
+  }
+}
 
 // Which day's session is currently being viewed in the Training tab.
 // Not persisted — always opens on today when the app is reloaded.
@@ -1218,6 +1359,40 @@ document.addEventListener("click", (e) => {
     renderAll();
     return;
   }
+
+  if (t.id === "account-signup-btn" || t.id === "account-login-btn") {
+    const statusEl = $("#account-status");
+    if (!supabaseClient) {
+      statusEl.textContent = "Sync isn't available right now (offline, or the Supabase library failed to load).";
+      return;
+    }
+    const email = $("#account-email").value.trim();
+    const password = $("#account-password").value;
+    if (!email || !password) {
+      statusEl.textContent = "Enter an email and password.";
+      return;
+    }
+    const isSignUp = t.id === "account-signup-btn";
+    statusEl.textContent = isSignUp ? "Signing up…" : "Logging in…";
+    const action = isSignUp ? signUpAccount(email, password) : logInAccount(email, password);
+    action.then(({ data, error }) => {
+      if (error) {
+        statusEl.textContent = error.message;
+        return;
+      }
+      if (isSignUp && !data.session) {
+        statusEl.textContent = "Check your email to confirm your account, then log in.";
+        return;
+      }
+      statusEl.textContent = "";
+    });
+    return;
+  }
+
+  if (t.id === "account-logout-btn") {
+    logOutAccount();
+    return;
+  }
 });
 
 document.addEventListener("change", (e) => {
@@ -1265,6 +1440,7 @@ function switchTab(tab) {
 
 injectIcons();
 renderAll();
+initAuth();
 
 // Re-check for a date rollover periodically, in case the app is left open
 // past midnight.

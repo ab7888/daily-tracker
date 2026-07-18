@@ -341,6 +341,29 @@ input[readonly] { opacity: 0.7; }
 
 .save-score-sep { color: var(--muted); }
 
+.account-field {
+  margin-top: 10px;
+}
+
+.account-field input {
+  width: 100%;
+}
+
+.account-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.account-actions button {
+  flex: 1;
+}
+
+#account-logged-in p {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
 .timing-row {
   display: flex;
   align-items: center;
