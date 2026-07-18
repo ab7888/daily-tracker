@@ -488,14 +488,6 @@ input[readonly] { opacity: 0.7; }
 
 .archive-row:last-child { border-bottom: none; }
 
-#notes-area {
-  width: 100%;
-  min-height: 60vh;
-  font-family: inherit;
-  white-space: pre-wrap;
-  line-height: 1.5;
-}
-
 /* ------------------------------- Training -------------------------------- */
 
 .day-pills {
