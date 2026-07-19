@@ -31,6 +31,8 @@
   <button class="tab-btn active" data-tab="today">Today</button>
   <button class="tab-btn" data-tab="training">Training</button>
   <button class="tab-btn" data-tab="rightnow">Right Now</button>
+  <button class="tab-btn" data-tab="projects">Projects</button>
+  <button class="tab-btn" data-tab="news">News</button>
   <button class="tab-btn" data-tab="monthly">Monthly</button>
   <button class="tab-btn" data-tab="archive">Archive</button>
   <button class="tab-btn" data-tab="account">Account</button>
@@ -125,6 +127,12 @@
     </div>
 
     <div class="card">
+      <h2><span class="icon" data-icon="dice"></span> Eliminate Today</h2>
+      <p class="hint">5 random Side Missions picked fresh each day — knock these out first.</p>
+      <div id="eliminate-today-list" class="task-list"></div>
+    </div>
+
+    <div class="card">
       <h2><span class="icon" data-icon="calendar"></span> <span id="calendar-month-label">Score Calendar</span></h2>
       <p class="hint">Tap a day to view or set a high-level plan for that date. Numbers show points earned.</p>
       <div id="calendar-grid" class="calendar-grid"></div>
@@ -177,6 +185,35 @@
         <input id="add-right-now-label" type="text" placeholder="New item…" data-enter-target="add-right-now-btn" />
         <button id="add-right-now-btn" class="add-task-btn">+ Add</button>
       </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS TAB -->
+  <section id="tab-projects" class="tab-panel">
+    <div class="card">
+      <h2><span class="icon" data-icon="folder"></span> Projects</h2>
+      <p class="hint">Each project gets its own free-form notes page.</p>
+      <button id="add-project-btn" class="add-task-btn">+ Add New</button>
+    </div>
+    <div id="projects-list"></div>
+  </section>
+
+  <!-- NEWS TAB -->
+  <section id="tab-news" class="tab-panel">
+    <div class="card">
+      <div class="news-header-row">
+        <h2><span class="icon" data-icon="newspaper"></span> News Board</h2>
+        <button id="news-refresh-btn" class="icon-btn" aria-label="refresh" title="Refresh"><span class="icon" data-icon="refresh"></span></button>
+      </div>
+      <p id="news-updated" class="hint"></p>
+    </div>
+    <div class="card">
+      <h2>London Weather</h2>
+      <div id="news-weather"></div>
+    </div>
+    <div class="card">
+      <h2><span class="icon" data-icon="train"></span> Line Status</h2>
+      <div id="news-lines"></div>
     </div>
   </section>
 

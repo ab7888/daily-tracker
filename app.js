@@ -52,7 +52,15 @@ const ICON_SVG = {
   checkCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>',
   listChecks: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5 5.5 8 8 5"/><line x1="11" y1="6.5" x2="20" y2="6.5"/><path d="M4 12.5 5.5 14 8 11"/><line x1="11" y1="12.5" x2="20" y2="12.5"/><path d="M4 18.5 5.5 20 8 17"/><line x1="11" y1="18.5" x2="20" y2="18.5"/></svg>',
   sunrise: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18a7 7 0 0 1 14 0"/><line x1="2" y1="18" x2="22" y2="18"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="4.5" y1="9" x2="7" y2="10.5"/><line x1="19.5" y1="9" x2="17" y2="10.5"/></svg>',
-  cloud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 8.5a4 4 0 0 1-.7 7.94"/><path d="M16.3 16.44H7"/></svg>'
+  cloud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 8.5a4 4 0 0 1-.7 7.94"/><path d="M16.3 16.44H7"/></svg>',
+  dice: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.2"/><circle cx="16" cy="8" r="1.2"/><circle cx="8" cy="16" r="1.2"/><circle cx="16" cy="16" r="1.2"/><circle cx="12" cy="12" r="1.2"/></svg>',
+  folder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></svg>',
+  newspaper: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="15" rx="1.5"/><line x1="6" y1="9" x2="14" y2="9"/><line x1="6" y1="12.5" x2="14" y2="12.5"/><line x1="6" y1="16" x2="10" y2="16"/><path d="M17 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H7"/></svg>',
+  train: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="4"/><line x1="5" y1="10" x2="19" y2="10"/><circle cx="8.5" cy="13.5" r="0.8"/><circle cx="15.5" cy="13.5" r="0.8"/><path d="M8 16l-2 5M16 16l2 5"/></svg>',
+  rain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 5.5a4 4 0 0 1-.7 7.94"/><line x1="8" y1="18" x2="8" y2="21"/><line x1="12" y1="18" x2="12" y2="21"/><line x1="16" y1="18" x2="16" y2="21"/></svg>',
+  snow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 14a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 4.5a4 4 0 0 1-.7 7.94"/><path d="M8 18v3M6.5 19.5h3M12 18v3M10.5 19.5h3M16 18v3M14.5 19.5h3"/></svg>',
+  storm: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 3.5a4 4 0 0 1-.7 7.94"/><path d="M13 14l-4 6h3l-1 5 5-7h-3l1-4Z"/></svg>',
+  refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>'
 };
 
 function injectIcons() {
@@ -213,6 +221,10 @@ function uid() { return "id" + (uidCounter++) + "_" + Math.random().toString(36)
 function defaultState() {
   const today = todayISO();
   const d = new Date();
+  const sideMissions = [
+    ["Shave", 5, ""],
+    ["Make bed", 5, ""]
+  ].map(([label, points, icon]) => ({ id: uid(), label, points, done: false, time: "", icon }));
   return {
     version: 2,
     currentDate: today,
@@ -247,10 +259,9 @@ function defaultState() {
     ].map(([label, points, icon]) => ({ id: uid(), label, points, done: false, time: "", icon })),
     timing: { sleep: "", lastMeal: "", gymFinish: "", lastCoffee: "", noScroll: false },
     gymSchedule: GYM_DAYS.map((day) => ({ day, done: false })),
-    sideMissions: [
-      ["Shave", 5, ""],
-      ["Make bed", 5, ""]
-    ].map(([label, points, icon]) => ({ id: uid(), label, points, done: false, time: "", icon })),
+    sideMissions,
+    eliminateToday: { date: today, ids: pickRandomSubset(sideMissions, Math.min(5, sideMissions.length)) },
+    projects: [],
     training: { done: {}, rehabDone: {}, pancakeDone: {} },
     dailyLog: {},
     dayPlans: {},
@@ -263,6 +274,22 @@ function defaultState() {
     },
     archive: []
   };
+}
+
+function pickRandomSubset(list, n) {
+  const ids = list.map((x) => x.id);
+  for (let i = ids.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [ids[i], ids[j]] = [ids[j], ids[i]];
+  }
+  return ids.slice(0, n);
+}
+
+function ensureEliminateToday() {
+  const today = todayISO();
+  if (!state.eliminateToday || state.eliminateToday.date !== today) {
+    state.eliminateToday = { date: today, ids: pickRandomSubset(state.sideMissions, Math.min(5, state.sideMissions.length)) };
+  }
 }
 
 // Maps an already-saved task's exact old (emoji-prefixed) label to its new
@@ -705,10 +732,12 @@ function esc(str) {
 
 function renderAll() {
   checkRollover();
+  ensureEliminateToday();
   renderHeader();
   renderTaskSection("routine-list", state.routineTasks, "routine", true);
   renderTaskSection("meals-list", state.meals, "meals", false);
   renderTaskSection("side-list", state.sideMissions, "side", true);
+  renderEliminateToday();
   renderTiming();
   renderGymSchedule();
   renderCalendar();
@@ -718,6 +747,7 @@ function renderAll() {
   renderSaveScore();
   renderRightNow();
   renderTomorrowPlan();
+  renderProjects();
   updateUndoButton();
   saveState();
 }
@@ -1050,6 +1080,185 @@ function renderTomorrowPlan() {
     `;
     el.appendChild(row);
   });
+}
+
+/* ----------------------------- Eliminate Today ----------------------------- */
+// 5 Side Missions picked at random each day (ensureEliminateToday, called
+// from renderAll) — a focus subset of the full backlog. Checking one off
+// here toggles the same underlying mission, so it counts the same as
+// completing it from the full Side Missions list.
+
+function renderEliminateToday() {
+  const el = $("#eliminate-today-list");
+  if (!el) return;
+  el.innerHTML = "";
+  const items = state.eliminateToday.ids
+    .map((id) => state.sideMissions.find((m) => m.id === id))
+    .filter(Boolean);
+  if (items.length === 0) {
+    el.innerHTML = `<p class="muted">Add some Side Missions and today's picks will show up here.</p>`;
+    return;
+  }
+  items.forEach((t) => {
+    const row = document.createElement("div");
+    row.className = "task-row" + (t.done ? " done" : "");
+    row.innerHTML = `
+      <button class="check-btn" data-kind="side" data-id="${t.id}" aria-label="toggle">${t.done ? "✓" : "✗"}</button>
+      ${t.icon ? iconTag(t.icon) : ""}
+      <span class="task-label">${esc(t.label)}</span>
+      <span class="task-points ${t.points < 0 ? "neg" : ""}">${t.points > 0 ? "+" : ""}${t.points}</span>
+    `;
+    el.appendChild(row);
+  });
+}
+
+/* -------------------------------- Projects --------------------------------- */
+// Each project is a freeform notes page. The note textarea saves via its own
+// debounced "input" listener (see event wiring) rather than going through
+// renderAll()/renderProjects() on every keystroke — rebuilding the list DOM
+// mid-typing would blow away focus and cursor position.
+
+function renderProjects() {
+  const el = $("#projects-list");
+  if (!el) return;
+  el.innerHTML = "";
+  if (state.projects.length === 0) {
+    el.innerHTML = `<div class="card"><p class="muted">No projects yet — tap "+ Add New" above to start one.</p></div>`;
+    return;
+  }
+  state.projects.forEach((p) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="project-header">
+        <h2 class="project-title">${esc(p.title)}</h2>
+        <div class="project-actions">
+          <button class="icon-btn" data-project-rename="${p.id}" aria-label="rename">&#9998;</button>
+          <button class="icon-btn del-btn" data-project-del="${p.id}" aria-label="delete">${iconTag("trash")}</button>
+        </div>
+      </div>
+      <textarea class="project-note" data-project-id="${p.id}" rows="12" placeholder="Start typing…">${esc(p.content)}</textarea>
+    `;
+    el.appendChild(card);
+  });
+}
+
+/* ------------------------------- News Board --------------------------------- */
+// Live external data (London weather + a few transport lines) — deliberately
+// kept out of `state` since it's not the user's data and shouldn't sync or
+// persist; just refetched on boot, on a timer, and on manual refresh.
+
+const WEATHER_CODES = {
+  0: { label: "Clear sky", icon: "sun" },
+  1: { label: "Mainly clear", icon: "sun" },
+  2: { label: "Partly cloudy", icon: "cloud" },
+  3: { label: "Overcast", icon: "cloud" },
+  45: { label: "Fog", icon: "cloud" },
+  48: { label: "Depositing rime fog", icon: "cloud" },
+  51: { label: "Light drizzle", icon: "rain" },
+  53: { label: "Drizzle", icon: "rain" },
+  55: { label: "Dense drizzle", icon: "rain" },
+  56: { label: "Freezing drizzle", icon: "rain" },
+  57: { label: "Dense freezing drizzle", icon: "rain" },
+  61: { label: "Slight rain", icon: "rain" },
+  63: { label: "Rain", icon: "rain" },
+  65: { label: "Heavy rain", icon: "rain" },
+  66: { label: "Freezing rain", icon: "rain" },
+  67: { label: "Heavy freezing rain", icon: "rain" },
+  71: { label: "Slight snow", icon: "snow" },
+  73: { label: "Snow", icon: "snow" },
+  75: { label: "Heavy snow", icon: "snow" },
+  77: { label: "Snow grains", icon: "snow" },
+  80: { label: "Slight rain showers", icon: "rain" },
+  81: { label: "Rain showers", icon: "rain" },
+  82: { label: "Violent rain showers", icon: "rain" },
+  85: { label: "Slight snow showers", icon: "snow" },
+  86: { label: "Heavy snow showers", icon: "snow" },
+  95: { label: "Thunderstorm", icon: "storm" },
+  96: { label: "Thunderstorm, slight hail", icon: "storm" },
+  99: { label: "Thunderstorm, heavy hail", icon: "storm" }
+};
+function weatherInfo(code) {
+  return WEATHER_CODES[code] || { label: "Unknown", icon: "cloud" };
+}
+
+let newsWeather = null;
+let newsLines = null;
+let newsError = null;
+let newsLastFetched = null;
+let newsLoading = false;
+
+async function fetchNews() {
+  newsLoading = true;
+  newsError = null;
+  renderNews();
+  try {
+    const [weatherRes, linesRes] = await Promise.all([
+      fetch("https://api.open-meteo.com/v1/forecast?latitude=51.5074&longitude=-0.1278&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe%2FLondon&forecast_days=2"),
+      fetch("https://api.tfl.gov.uk/Line/elizabeth,metropolitan,dlr,c2c/Status")
+    ]);
+    if (!weatherRes.ok || !linesRes.ok) throw new Error("Request failed");
+    const weatherData = await weatherRes.json();
+    newsLines = await linesRes.json();
+    newsWeather = weatherData.daily;
+    newsLastFetched = new Date();
+  } catch (err) {
+    console.error("News fetch failed", err);
+    newsError = "Couldn't load news right now — check your connection and try again.";
+  }
+  newsLoading = false;
+  renderNews();
+}
+
+function renderNews() {
+  const weatherEl = $("#news-weather");
+  const linesEl = $("#news-lines");
+  const updatedEl = $("#news-updated");
+  if (!weatherEl || !linesEl) return;
+
+  if (newsError) {
+    weatherEl.innerHTML = `<p class="muted">${esc(newsError)}</p>`;
+    linesEl.innerHTML = "";
+  } else if (!newsWeather) {
+    weatherEl.innerHTML = `<p class="muted">${newsLoading ? "Loading…" : ""}</p>`;
+  } else {
+    const dayLabels = ["Today", "Tomorrow"];
+    weatherEl.innerHTML = newsWeather.time.map((date, i) => {
+      const info = weatherInfo(newsWeather.weathercode[i]);
+      const max = Math.round(newsWeather.temperature_2m_max[i]);
+      const min = Math.round(newsWeather.temperature_2m_min[i]);
+      return `
+        <div class="weather-row">
+          ${iconTag(info.icon)}
+          <span class="weather-day">${dayLabels[i] || date}</span>
+          <span class="weather-desc">${esc(info.label)}</span>
+          <span class="weather-temp">${max}&deg; / ${min}&deg;</span>
+        </div>
+      `;
+    }).join("");
+  }
+
+  if (newsLines && !newsError) {
+    linesEl.innerHTML = newsLines.map((line) => {
+      const status = line.lineStatuses && line.lineStatuses[0];
+      const desc = status ? status.statusSeverityDescription : "Unknown";
+      const good = desc === "Good Service";
+      return `
+        <div class="line-row">
+          <span class="line-name">${esc(line.name)}</span>
+          <span class="line-status ${good ? "good" : "disrupted"}">${esc(desc)}</span>
+        </div>
+      `;
+    }).join("");
+  } else if (!newsError && newsLoading) {
+    linesEl.innerHTML = `<p class="muted">Loading…</p>`;
+  }
+
+  if (updatedEl) {
+    updatedEl.textContent = newsLastFetched
+      ? `Updated ${newsLastFetched.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`
+      : "";
+  }
 }
 
 /* ------------------------------- Training -------------------------------- */
@@ -1400,6 +1609,55 @@ document.addEventListener("click", (e) => {
     logOutAccount();
     return;
   }
+
+  if (t.id === "add-project-btn") {
+    const title = prompt("Project name:", "New Project");
+    if (title === null) return;
+    pushUndo();
+    state.projects.push({ id: uid(), title: title.trim() || "Untitled Project", content: "" });
+    renderAll();
+    return;
+  }
+
+  if (t.dataset && t.dataset.projectRename) {
+    const proj = state.projects.find((p) => p.id === t.dataset.projectRename);
+    if (!proj) return;
+    const title = prompt("Project name:", proj.title);
+    if (title === null) return;
+    pushUndo();
+    proj.title = title.trim() || proj.title;
+    renderAll();
+    return;
+  }
+
+  if (t.dataset && t.dataset.projectDel) {
+    if (!confirm("Delete this project?")) return;
+    pushUndo();
+    const idx = state.projects.findIndex((p) => p.id === t.dataset.projectDel);
+    if (idx > -1) state.projects.splice(idx, 1);
+    renderAll();
+    return;
+  }
+
+  if (t.id === "news-refresh-btn") {
+    fetchNews();
+    return;
+  }
+});
+
+// Project notes save via their own debounced listener rather than the usual
+// pushUndo()+renderAll() pattern — renderAll() rebuilds the whole projects
+// list from scratch, which would tear out the focused textarea (and the
+// cursor position in it) on every keystroke.
+let projectSaveTimer = null;
+document.addEventListener("input", (e) => {
+  const t = e.target;
+  if (!t.classList.contains("project-note")) return;
+  const proj = state.projects.find((p) => p.id === t.dataset.projectId);
+  if (!proj) return;
+  proj.content = t.value;
+  if (projectSaveTimer) clearTimeout(projectSaveTimer);
+  projectSaveTimer = setTimeout(saveState, 400);
 });
 
 document.addEventListener("change", (e) => {
@@ -1460,6 +1718,7 @@ function switchTab(tab) {
 injectIcons();
 renderAll();
 initAuth();
+fetchNews();
 
 // Re-check for a date rollover periodically, in case the app is left open
 // past midnight.
@@ -1468,6 +1727,9 @@ setInterval(() => {
   checkRollover();
   if (before !== state.currentDate) renderAll();
 }, 60 * 1000);
+
+// Keep the News Board reasonably fresh without refetching on every render.
+setInterval(fetchNews, 15 * 60 * 1000);
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
