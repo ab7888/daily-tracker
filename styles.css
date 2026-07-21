@@ -148,11 +148,17 @@ main {
 .task-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  row-gap: 6px;
   gap: 8px;
   padding: 8px 0;
   border-bottom: 1px solid var(--border);
   position: relative;
   background: var(--card);
+}
+
+.task-row .task-label {
+  min-width: 90px;
 }
 
 .task-row:last-child { border-bottom: none; }
@@ -292,7 +298,8 @@ button .icon { color: currentColor; }
 
 input[readonly] { opacity: 0.7; }
 
-.task-time {
+.task-time,
+.plan-time {
   width: 74px;
   flex-shrink: 0;
   font-size: 11px;
@@ -301,6 +308,23 @@ input[readonly] { opacity: 0.7; }
 
 .add-row input[type="time"] {
   width: 84px;
+  flex-shrink: 0;
+}
+
+.time-bump-group {
+  display: flex;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.time-bump-btn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 5px;
   flex-shrink: 0;
 }
 

@@ -265,7 +265,7 @@ function defaultState() {
     training: { done: {}, rehabDone: {}, pancakeDone: {} },
     dailyLog: {},
     dayPlans: {},
-    tomorrowPlan: [],
+    tomorrowPlan: { order: [], times: {} },
     rightNow: [],
     monthly: {
       year: d.getFullYear(),
@@ -358,11 +358,18 @@ function loadState() {
     const parsed = JSON.parse(raw);
     // fill in any missing fields from a default (forward-compat safety)
     const base = defaultState();
+    // tomorrowPlan used to be a flat array of ad-hoc {id,label,points}
+    // entries; it's now { order, times } keyed to real routineTasks ids.
+    // Old-shaped data doesn't map onto the new format, so just start fresh.
+    const tomorrowPlan = (parsed.tomorrowPlan && !Array.isArray(parsed.tomorrowPlan))
+      ? { order: Array.isArray(parsed.tomorrowPlan.order) ? parsed.tomorrowPlan.order : [], times: parsed.tomorrowPlan.times || {} }
+      : { order: [], times: {} };
     const merged = Object.assign({}, base, parsed, {
       timing: Object.assign({}, base.timing, parsed.timing),
       monthly: Object.assign({}, base.monthly, parsed.monthly),
       training: Object.assign({}, base.training, parsed.training),
-      dayPlans: Object.assign({}, base.dayPlans, parsed.dayPlans)
+      dayPlans: Object.assign({}, base.dayPlans, parsed.dayPlans),
+      tomorrowPlan
     });
     // Gym schedule day *labels* always come fresh from the current program —
     // only the per-day "done" flags are worth keeping from a save.
@@ -678,22 +685,26 @@ function checkRollover() {
     state.monthly = { year: now.getFullYear(), month: now.getMonth() + 1, days: {} };
   }
 
-  // Reset the daily checklist for the new day.
-  state.routineTasks.forEach((t) => (t.done = false));
-  state.meals.forEach((t) => (t.done = false));
-  state.sideMissions.forEach((t) => (t.done = false));
+  // Reset the daily checklist for the new day. Target-completion times reset
+  // too — they're a plan for *that* day, not a permanent setting.
+  state.routineTasks.forEach((t) => { t.done = false; t.time = ""; });
+  state.meals.forEach((t) => { t.done = false; t.time = ""; });
+  // Ticked Side Missions are done — they don't come back tomorrow. Anything
+  // left unticked carries over (just with its time cleared, same as above).
+  state.sideMissions = state.sideMissions.filter((t) => !t.done);
+  state.sideMissions.forEach((t) => { t.time = ""; });
   state.gymSchedule.forEach((g) => (g.done = false));
   state.timing = { sleep: "", lastMeal: "", gymFinish: "", lastCoffee: "", noScroll: false };
   state.training = { done: {}, rehabDone: {}, pancakeDone: {} };
 
-  // Anything queued in "Plan for Tomorrow" becomes part of the Daily Routine
-  // Tasks now that tomorrow has arrived, then the queue clears.
-  if (state.tomorrowPlan.length > 0) {
-    state.tomorrowPlan.forEach((p) => {
-      state.routineTasks.push({ id: uid(), label: p.label, points: p.points, done: false, time: "", icon: "" });
-    });
-    state.tomorrowPlan = [];
-  }
+  // Apply whatever order/times were set on the "Plan for Tomorrow" tab, now
+  // that tomorrow has arrived, then clear the plan for the next cycle.
+  state.routineTasks = tomorrowPlanDisplayOrder();
+  Object.keys(state.tomorrowPlan.times).forEach((id) => {
+    const task = state.routineTasks.find((t) => t.id === id);
+    if (task) task.time = state.tomorrowPlan.times[id];
+  });
+  state.tomorrowPlan = { order: [], times: {} };
 
   state.currentDate = today;
   trainingViewDay = todayDayIdx();
@@ -777,13 +788,14 @@ function renderTaskSection(listId, tasks, kind, reorderable) {
       ${t.icon ? iconTag(t.icon) : ""}
       <span class="task-label" data-kind="${kind}" data-id="${t.id}">${esc(t.label)}</span>
       <input type="time" class="task-time" data-kind="${kind}" data-id="${t.id}" value="${t.time || ""}" title="Desired completion time" />
+      ${kind === "routine" ? `<span class="time-bump-group"><button class="time-bump-btn" data-bump-minutes="5">+5</button><button class="time-bump-btn" data-bump-minutes="20">+20</button></span>` : ""}
       <span class="task-points ${t.points < 0 ? "neg" : ""}" data-kind="${kind}" data-id="${t.id}">${t.points > 0 ? "+" : ""}${t.points}</span>
       <button class="icon-btn edit-btn" data-kind="${kind}" data-id="${t.id}" aria-label="edit">✎</button>
       <button class="icon-btn del-btn" data-kind="${kind}" data-id="${t.id}" aria-label="delete">${iconTag("trash")}</button>
     `;
     el.appendChild(row);
   });
-  if (reorderable) attachDragHandlers(el, kind);
+  if (reorderable) attachDragHandlers(el, getList(kind), swapListItems);
 }
 
 /* ---------------------------- Drag to reorder ---------------------------- */
@@ -797,7 +809,10 @@ function swapListItems(list, idA, idB) {
   [list[iA], list[iB]] = [list[iB], list[iA]];
 }
 
-function attachDragHandlers(containerEl, kind) {
+// `list` + `swapFn` are generic so this same drag machinery works for both
+// arrays of task objects (swapListItems) and plain id arrays like
+// tomorrowPlan.order (swapIdArray).
+function attachDragHandlers(containerEl, list, swapFn) {
   const rows = Array.from(containerEl.querySelectorAll(".task-row"));
   rows.forEach((row) => {
     const handle = row.querySelector(".drag-handle");
@@ -807,7 +822,6 @@ function attachDragHandlers(containerEl, kind) {
       e.preventDefault();
       pushUndo();
       const dragEl = row;
-      const list = getList(kind);
       let startY = e.clientY;
 
       dragEl.classList.add("dragging");
@@ -845,7 +859,7 @@ function attachDragHandlers(containerEl, kind) {
             const nextCenter = nextRect.top + nextRect.height / 2;
             if (dragCenter > nextCenter) {
               containerEl.insertBefore(dragEl, next.nextSibling);
-              swapListItems(list, dragEl.dataset.id, next.dataset.id);
+              swapFn(list, dragEl.dataset.id, next.dataset.id);
               startY = ev.clientY;
               dragEl.style.transform = "translateY(0px)";
             }
@@ -857,7 +871,7 @@ function attachDragHandlers(containerEl, kind) {
             const prevCenter = prevRect.top + prevRect.height / 2;
             if (dragCenter < prevCenter) {
               containerEl.insertBefore(dragEl, prev);
-              swapListItems(list, dragEl.dataset.id, prev.dataset.id);
+              swapFn(list, dragEl.dataset.id, prev.dataset.id);
               startY = ev.clientY;
               dragEl.style.transform = "translateY(0px)";
             }
@@ -1063,23 +1077,66 @@ function renderRightNow() {
 }
 
 /* ----------------------------- Plan for Tomorrow --------------------------- */
-// Jot down tasks for tomorrow's Daily Routine Tasks today — they auto-feed
-// into the real list the moment the date actually rolls over (checkRollover).
+// A live mirror of the Daily Routine Tasks — same tasks, but here you can
+// only reorder them and set a planned time. Nothing here can be checked off
+// or deleted; do that from the real list. Applied to routineTasks the moment
+// the date actually rolls over (checkRollover), then cleared for next time.
+
+// The order rows should display in: tomorrowPlan.order first (for ids it
+// knows about), then any routineTasks not yet covered by the plan (new since
+// last visit), in their existing relative order.
+function tomorrowPlanDisplayOrder() {
+  const byId = new Map(state.routineTasks.map((t) => [t.id, t]));
+  const ordered = [];
+  state.tomorrowPlan.order.forEach((id) => {
+    if (byId.has(id)) {
+      ordered.push(byId.get(id));
+      byId.delete(id);
+    }
+  });
+  state.routineTasks.forEach((t) => {
+    if (byId.has(t.id)) ordered.push(t);
+  });
+  return ordered;
+}
+
+function swapIdArray(arr, idA, idB) {
+  const iA = arr.indexOf(idA);
+  const iB = arr.indexOf(idB);
+  if (iA === -1 || iB === -1) return;
+  [arr[iA], arr[iB]] = [arr[iB], arr[iA]];
+}
 
 function renderTomorrowPlan() {
   const el = $("#tomorrow-plan-list");
   if (!el) return;
+  // Keep tomorrowPlan.order in sync with the live task list — idempotent
+  // when nothing's changed, and self-heals if tasks were added/removed.
+  const items = tomorrowPlanDisplayOrder();
+  state.tomorrowPlan.order = items.map((t) => t.id);
   el.innerHTML = "";
-  state.tomorrowPlan.forEach((item) => {
+  if (items.length === 0) {
+    el.innerHTML = `<p class="muted">Add some Daily Routine Tasks and they'll show up here to plan.</p>`;
+    return;
+  }
+  items.forEach((t) => {
     const row = document.createElement("div");
     row.className = "task-row";
+    row.dataset.id = t.id;
     row.innerHTML = `
-      <span class="task-label">${esc(item.label)}</span>
-      <span class="task-points ${item.points < 0 ? "neg" : ""}">${item.points > 0 ? "+" : ""}${item.points}</span>
-      <button class="icon-btn del-btn" data-tomorrow-del="${item.id}" aria-label="delete">${iconTag("trash")}</button>
+      <span class="drag-handle" aria-label="drag to reorder"><svg viewBox="0 0 16 16" width="14" height="14"><circle cx="4" cy="3" r="1.4"/><circle cx="4" cy="8" r="1.4"/><circle cx="4" cy="13" r="1.4"/><circle cx="10" cy="3" r="1.4"/><circle cx="10" cy="8" r="1.4"/><circle cx="10" cy="13" r="1.4"/></svg></span>
+      ${t.icon ? iconTag(t.icon) : ""}
+      <span class="task-label">${esc(t.label)}</span>
+      <input type="time" class="plan-time" data-id="${t.id}" value="${state.tomorrowPlan.times[t.id] || ""}" title="Planned time for tomorrow" />
+      <span class="time-bump-group">
+        <button class="time-bump-btn" data-bump-minutes="5">+5</button>
+        <button class="time-bump-btn" data-bump-minutes="20">+20</button>
+      </span>
+      <span class="task-points ${t.points < 0 ? "neg" : ""}">${t.points > 0 ? "+" : ""}${t.points}</span>
     `;
     el.appendChild(row);
   });
+  attachDragHandlers(el, state.tomorrowPlan.order, swapIdArray);
 }
 
 /* ----------------------------- Eliminate Today ----------------------------- */
@@ -1347,6 +1404,26 @@ function getList(kind) {
   return null;
 }
 
+// Adds `minutes` to a time <input>'s current value (wrapping past midnight),
+// defaulting to the current wall-clock time if it's empty, then fires a real
+// "change" event so the existing per-field handler persists it — same code
+// path as picking a time by hand, no separate state-mutation logic needed.
+function bumpTimeInput(inputEl, minutes) {
+  let base;
+  if (inputEl.value) {
+    const [h, m] = inputEl.value.split(":").map(Number);
+    base = h * 60 + m;
+  } else {
+    const now = new Date();
+    base = now.getHours() * 60 + now.getMinutes();
+  }
+  const total = ((base + minutes) % 1440 + 1440) % 1440;
+  const hh = String(Math.floor(total / 60)).padStart(2, "0");
+  const mm = String(total % 60).padStart(2, "0");
+  inputEl.value = `${hh}:${mm}`;
+  inputEl.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
 document.addEventListener("click", (e) => {
   const t = e.target.closest("button") || e.target;
 
@@ -1554,25 +1631,10 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  if (t.dataset && t.dataset.tomorrowDel) {
-    pushUndo();
-    const idx = state.tomorrowPlan.findIndex((x) => x.id === t.dataset.tomorrowDel);
-    if (idx > -1) state.tomorrowPlan.splice(idx, 1);
-    renderAll();
-    return;
-  }
-
-  if (t.id === "add-tomorrow-btn") {
-    const labelInput = $("#add-tomorrow-label");
-    const pointsInput = $("#add-tomorrow-points");
-    const label = labelInput.value.trim();
-    const points = Number(pointsInput.value);
-    if (!label || Number.isNaN(points)) return;
-    pushUndo();
-    state.tomorrowPlan.push({ id: uid(), label, points });
-    labelInput.value = "";
-    pointsInput.value = "5";
-    renderAll();
+  if (t.classList.contains("time-bump-btn")) {
+    const row = t.closest(".task-row");
+    const input = row && row.querySelector(".task-time, .plan-time");
+    if (input) bumpTimeInput(input, Number(t.dataset.bumpMinutes));
     return;
   }
 
@@ -1675,12 +1737,28 @@ document.addEventListener("change", (e) => {
     return;
   }
 
+  // Deliberately skip renderAll() for both time inputs below: it wipes and
+  // rebuilds the whole list's DOM (el.innerHTML = ""), which yanks the
+  // native time picker closed mid-interaction — on some browsers "change"
+  // fires after each segment (hour, then minute), so a full re-render after
+  // the first one used to slam the picker shut before you could finish.
+  // Time doesn't feed into any score calculation, so nothing else needs to
+  // visually update here anyway — just persist it.
   if (t.classList.contains("task-time")) {
     pushUndo();
     const list = getList(t.dataset.kind);
     const item = list.find((x) => x.id === t.dataset.id);
     if (item) item.time = t.value;
-    renderAll();
+    saveState();
+    updateUndoButton();
+    return;
+  }
+
+  if (t.classList.contains("plan-time")) {
+    pushUndo();
+    state.tomorrowPlan.times[t.dataset.id] = t.value;
+    saveState();
+    updateUndoButton();
     return;
   }
 

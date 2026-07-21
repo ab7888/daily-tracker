@@ -31,6 +31,7 @@
   <button class="tab-btn active" data-tab="today">Today</button>
   <button class="tab-btn" data-tab="training">Training</button>
   <button class="tab-btn" data-tab="rightnow">Right Now</button>
+  <button class="tab-btn" data-tab="tomorrow">Tomorrow</button>
   <button class="tab-btn" data-tab="projects">Projects</button>
   <button class="tab-btn" data-tab="news">News</button>
   <button class="tab-btn" data-tab="monthly">Monthly</button>
@@ -51,17 +52,6 @@
         <input id="add-routine-time" type="time" title="Desired completion time (optional)" data-enter-target="add-routine-btn" />
         <input id="add-routine-points" type="number" value="5" data-enter-target="add-routine-btn" />
         <button id="add-routine-btn" class="add-task-btn" data-kind="routine">+ Add</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2><span class="icon" data-icon="sunrise"></span> Plan for Tomorrow</h2>
-      <p class="hint">Queue up tasks here today — they get added to Daily Routine Tasks automatically once tomorrow actually arrives.</p>
-      <div id="tomorrow-plan-list" class="task-list"></div>
-      <div class="add-row">
-        <input id="add-tomorrow-label" type="text" placeholder="New task for tomorrow…" data-enter-target="add-tomorrow-btn" />
-        <input id="add-tomorrow-points" type="number" value="5" data-enter-target="add-tomorrow-btn" />
-        <button id="add-tomorrow-btn" class="add-task-btn">+ Add</button>
       </div>
     </div>
 
@@ -185,6 +175,15 @@
         <input id="add-right-now-label" type="text" placeholder="New item…" data-enter-target="add-right-now-btn" />
         <button id="add-right-now-btn" class="add-task-btn">+ Add</button>
       </div>
+    </div>
+  </section>
+
+  <!-- TOMORROW TAB -->
+  <section id="tab-tomorrow" class="tab-panel">
+    <div class="card">
+      <h2><span class="icon" data-icon="sunrise"></span> Plan for Tomorrow</h2>
+      <p class="hint">Same tasks as Daily Routine Tasks — reorder them and set planned times here, and it all feeds into the real list the moment tomorrow actually arrives.</p>
+      <div id="tomorrow-plan-list" class="task-list"></div>
     </div>
   </section>
 
