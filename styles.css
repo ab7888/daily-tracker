@@ -331,6 +331,32 @@ input[readonly] { opacity: 0.7; }
   flex-shrink: 0;
 }
 
+/* Cascade time-shift: tap a task's label to anchor it, highlighting it and
+   everything below — its own +5/+20 then shift that whole range. */
+.task-label[data-kind="routine"] {
+  cursor: pointer;
+}
+
+.shift-anchor-label {
+  background: rgba(240, 180, 20, 0.35);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin: -1px -5px;
+}
+
+.task-row.shift-cascade {
+  background: rgba(88, 166, 255, 0.1);
+  margin: 0 -14px;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.task-row.shift-anchor-row .time-bump-btn {
+  background: rgba(240, 180, 20, 0.22);
+  border-color: rgba(240, 180, 20, 0.55);
+  color: var(--text);
+}
+
 .bulk-add-row {
   display: flex;
   flex-direction: column;

@@ -755,6 +755,7 @@ function renderAll() {
   ensureEliminateToday();
   renderHeader();
   renderTaskSection("routine-list", state.routineTasks, "routine", true);
+  applyTimeShiftHighlight();
   renderTaskSection("meals-list", state.meals, "meals", false);
   renderTaskSection("side-list", state.sideMissions, "side", true);
   renderEliminateToday();
@@ -1433,14 +1434,13 @@ function getList(kind) {
   return null;
 }
 
-// Adds `minutes` to a time <input>'s current value (wrapping past midnight),
-// defaulting to the current wall-clock time if it's empty, then fires a real
-// "change" event so the existing per-field handler persists it — same code
-// path as picking a time by hand, no separate state-mutation logic needed.
-function bumpTimeInput(inputEl, minutes) {
+// Adds `minutes` to a "HH:MM" string (wrapping past midnight), defaulting to
+// the current wall-clock time when empty. Pure — shared by the single-input
+// bump (bumpTimeInput) and the cascade bump (cascadeBumpTime) below.
+function addMinutesToTimeValue(value, minutes) {
   let base;
-  if (inputEl.value) {
-    const [h, m] = inputEl.value.split(":").map(Number);
+  if (value) {
+    const [h, m] = value.split(":").map(Number);
     base = h * 60 + m;
   } else {
     const now = new Date();
@@ -1449,8 +1449,55 @@ function bumpTimeInput(inputEl, minutes) {
   const total = ((base + minutes) % 1440 + 1440) % 1440;
   const hh = String(Math.floor(total / 60)).padStart(2, "0");
   const mm = String(total % 60).padStart(2, "0");
-  inputEl.value = `${hh}:${mm}`;
+  return `${hh}:${mm}`;
+}
+
+// Bumps a time <input>'s value directly, then fires a real "change" event so
+// the existing per-field handler persists it — same code path as picking a
+// time by hand, no separate state-mutation logic needed.
+function bumpTimeInput(inputEl, minutes) {
+  inputEl.value = addMinutesToTimeValue(inputEl.value, minutes);
   inputEl.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+/* ------------------------- Cascade time-shift (Daily Routine Tasks) -------
+   Tap a task's label to anchor it — that row and everything below it (in
+   current order) highlight. The anchor's own +5/+20 buttons then shift the
+   whole highlighted range by that amount instead of just themselves, so
+   "everything from here on is running late" is a two-tap fix rather than
+   bumping each task individually. Only rows that already have a time set
+   get shifted (nothing fabricated for blank ones) — the anchor itself is the
+   one exception, matching the single-row bump's "default to now" behavior.
+   Selection is pure UI state, not app data — not persisted, not synced.
+   ------------------------------------------------------------------------- */
+
+let timeShiftAnchorId = null;
+
+function applyTimeShiftHighlight() {
+  const rows = $$("#routine-list .task-row");
+  let foundAnchor = false;
+  rows.forEach((row) => {
+    const isAnchor = row.dataset.id === timeShiftAnchorId;
+    if (isAnchor) foundAnchor = true;
+    row.classList.toggle("shift-anchor-row", isAnchor);
+    row.classList.toggle("shift-cascade", foundAnchor && !isAnchor);
+    const label = row.querySelector(".task-label");
+    if (label) label.classList.toggle("shift-anchor-label", isAnchor);
+  });
+  if (!foundAnchor) timeShiftAnchorId = null;
+}
+
+function cascadeBumpTime(anchorId, minutes) {
+  const idx = state.routineTasks.findIndex((t) => t.id === anchorId);
+  if (idx === -1) return;
+  pushUndo();
+  for (let i = idx; i < state.routineTasks.length; i++) {
+    const task = state.routineTasks[i];
+    if (i === idx || task.time) {
+      task.time = addMinutesToTimeValue(task.time, minutes);
+    }
+  }
+  renderAll();
 }
 
 document.addEventListener("click", (e) => {
@@ -1662,8 +1709,19 @@ document.addEventListener("click", (e) => {
 
   if (t.classList.contains("time-bump-btn")) {
     const row = t.closest(".task-row");
-    const input = row && row.querySelector(".task-time, .plan-time");
-    if (input) bumpTimeInput(input, Number(t.dataset.bumpMinutes));
+    const minutes = Number(t.dataset.bumpMinutes);
+    if (row && row.dataset.id === timeShiftAnchorId && row.dataset.kind === "routine") {
+      cascadeBumpTime(row.dataset.id, minutes);
+    } else {
+      const input = row && row.querySelector(".task-time, .plan-time");
+      if (input) bumpTimeInput(input, minutes);
+    }
+    return;
+  }
+
+  if (t.classList.contains("task-label") && t.dataset.kind === "routine") {
+    timeShiftAnchorId = (timeShiftAnchorId === t.dataset.id) ? null : t.dataset.id;
+    applyTimeShiftHighlight();
     return;
   }
 
