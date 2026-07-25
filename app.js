@@ -107,19 +107,22 @@ const TRAINING_SESSIONS = {
     key: "pullA",
     day: 1, // Tuesday
     shortTitle: "Pull A",
-    title: "Pull A — Weighted PU & OAP",
-    focus: "Primary: lats · biceps · scapular depressors · unilateral pulling strength",
+    title: "Pull A — Weighted Pull-Up & OAP Progression",
+    focus: "Primary: lats · biceps · scapular depressors · unilateral pulling strength · core-to-lever carryover",
     exercises: [
-      { section: "MAIN LIFT", name: "Weighted Pull-Up (pronated, sh-width)", sets: 4, reps: "5–8", weight: "+20kg", notes: "+2.5kg when 4×6 achieved. Target: +30kg · Current: 6,5,4,4 at +20kg — sets 3–4 are the focus" },
-      { section: "OAP PROGRESSION", name: "Archer Pull-Up", sets: 4, reps: "5–6 ea. side", weight: "Bodyweight", notes: "Add 2.5kg when 4×6 clean each side · Extend non-working arm progressively straighter each week" },
-      { section: null, name: "One-Arm Negative (OAN)", sets: 3, reps: "3–5 ea. side", weight: "Bodyweight", notes: "Slow the eccentric — target 5s down · Jump to top, lower with one arm. Most direct OAP builder" },
-      { section: null, name: "One-Arm Dead Hang", sets: 3, reps: "10–20s ea.", weight: "Bodyweight", notes: "Add load when 20s comfortable · Grip and shoulder stability. Alternate arms" },
-      { section: "SUPPLEMENTARY PULLING", name: "Straight-Arm Lat Pulldown", sets: 4, reps: "10–12", weight: "50kg", notes: "+2.5kg when 4×12 · Arms locked. Front lever and OAP both need this" },
-      { section: null, name: "Barbell Pendlay Row", sets: 4, reps: "6–8", weight: "60kg", notes: "+2.5kg when 4×8 · Horizontal torso. Reset each rep — don't skip this one" },
-      { section: null, name: "Seated Cable Row (wide grip)", sets: 3, reps: "10", weight: "62.5kg", notes: "+2.5kg when 3×10 · Mid-back thickness and retraction endurance" },
-      { section: "ACCESSORY", name: "Bicep Curl (drop set)", sets: 2, reps: "10 → failure", weight: "14kg → 8kg", notes: "Add 1kg top set when 12 reps before drop · OAP requires strong bicep under full load" },
-      { section: null, name: "Cable Face Pull", sets: 3, reps: "15", weight: "17.5kg", notes: "+2.5kg when 3×15 · Shoulder health — don't skip" },
-      { section: null, name: "Scapular Pull-Ups", sets: 3, reps: "10–12", weight: "Bodyweight", notes: "Add 5kg when 3×12 · Slow and deliberate. Depression strength for OAP entry" }
+      { section: "MAIN LIFT", name: "Weighted Pull-Up (pronated, sh-width)", sets: 4, reps: "5–8", weight: "+20kg", notes: "Progress: +2.5kg at 4×6 · Target: +30kg" },
+      { section: "OAP PROGRESSION", name: "Archer Pull-Up", sets: 4, reps: "5–6 ea. side", weight: "Bodyweight", notes: "Extend non-working arm straighter each week" },
+      { section: null, name: "One-Arm Negative (OAN)", sets: 3, reps: "3–5 ea. side", weight: "Bodyweight", notes: "5s controlled lower per rep" },
+      { section: null, name: "One-Arm Dead Hang", sets: 3, reps: "10–20s ea.", weight: "Bodyweight", notes: "Add load when 20s comfortable" },
+      { section: "SUPPLEMENTARY", name: "Straight-Arm Lat Pulldown", sets: 4, reps: "10–12", weight: "50kg", notes: "Progress: +2.5kg at 4×12" },
+      { section: null, name: "Barbell Pendlay Row", sets: 4, reps: "6–8", weight: "60kg", notes: "Progress: +2.5kg at 4×8" },
+      { section: null, name: "Seated Cable Row (wide grip)", sets: 3, reps: "10", weight: "62.5kg", notes: "Progress: +2.5kg at 3×10" },
+      { section: "ACCESSORY", name: "Bicep Curl (drop set)", sets: 2, reps: "10 → failure", weight: "14kg → 8kg", notes: "" },
+      { section: null, name: "Cable Face Pull", sets: 3, reps: "15", weight: "17.5kg", notes: "" },
+      { section: null, name: "Scapular Pull-Ups", sets: 3, reps: "10–12", weight: "Bodyweight", notes: "" },
+      { section: "CORE FINISHER", name: "Toes-to-Bar", sets: 3, reps: "8–12", weight: "Bodyweight", notes: "Strict — no kipping · Feeds directly into OAP and front lever compression" },
+      { section: null, name: "Dragon Flag (negative)", sets: 3, reps: "4–6", weight: "Bodyweight", notes: "5s controlled lower · Build to full dragon flag before adding load" },
+      { section: null, name: "L-Sit Hold (parallel bars or floor)", sets: 3, reps: "10–20s", weight: "Bodyweight", notes: "Rest 45s between · Progress: tuck → one leg extended → full L-sit" }
     ]
   },
   legsA: {
@@ -143,18 +146,21 @@ const TRAINING_SESSIONS = {
     key: "pushB",
     day: 3, // Thursday
     shortTitle: "Push B",
-    title: "Push B — Handstand Skill",
-    focus: "Primary: handstand balance · scapular control · shoulder endurance",
+    title: "Push B — Handstand Skill & Shoulder Accessory",
+    focus: "Primary: handstand balance · scapular control · shoulder endurance · anti-extension core",
     exercises: [
-      { section: "HANDSTAND SKILL — quality over quantity", name: "Freestanding Handstand Attempts", sets: "5–8", reps: "Max hold", weight: "Bodyweight", notes: "Target: consistent 20s → 30s → 60s · Kick up, find balance. Rest 90s between. Log best hold each session" },
-      { section: null, name: "Wall Handstand (chest to wall)", sets: 3, reps: "45–60s", weight: "Bodyweight", notes: "Extend to 90s before moving on · Chest-to-wall = better body line than back-to-wall" },
-      { section: null, name: "Handstand Shoulder Taps", sets: 3, reps: "8–12 taps", weight: "Bodyweight", notes: "Increase taps per set weekly · Against wall — builds unilateral shoulder stability for balance" },
-      { section: null, name: "Pike Compression Hold", sets: 3, reps: "20–30s", weight: "Bodyweight / 5kg on legs", notes: "Extend hold, then add weight · Hip flexor and compression strength — feeds press-to-HS long term" },
-      { section: "SHOULDER ACCESSORY", name: "Incline DB Press", sets: 3, reps: "10–12", weight: "20kg DBs", notes: "+2kg when 3×12 · Shoulder stability. Supporting work" },
-      { section: null, name: "Cable Pull-Over (straight arm)", sets: 3, reps: "12", weight: "32.5kg", notes: "+2.5kg when 3×12 · Lat in lengthened position — straight-arm strength" },
-      { section: null, name: "Rear Delt Fly (pause at top)", sets: 3, reps: "12–15", weight: "10kg DBs", notes: "+2kg when 3×15 · Posterior shoulder balance — protects under heavy pressing volume" },
-      { section: null, name: "Band Pull-Aparts", sets: 3, reps: "20", weight: "Medium band", notes: "Progress band resistance · Shoulder health. Keep smooth" },
-      { section: null, name: "Rotator Cuff Ext. Rotation", sets: 2, reps: "15 each", weight: "5kg", notes: "Maintain — prehab only · Never load this heavily. Shoulder longevity" }
+      { section: "HANDSTAND SKILL", name: "Freestanding Handstand Attempts", sets: "5–8", reps: "Max hold", weight: "Bodyweight", notes: "Log best hold each session · Target: 20s → 30s → 60s" },
+      { section: null, name: "Wall Handstand (chest to wall)", sets: 3, reps: "45–60s", weight: "Bodyweight", notes: "Better body line than back-to-wall" },
+      { section: null, name: "Handstand Shoulder Taps", sets: 3, reps: "8–12 taps", weight: "Bodyweight", notes: "Against wall · Builds unilateral shoulder stability" },
+      { section: null, name: "Pike Compression Hold", sets: 3, reps: "20–30s", weight: "Bodyweight / 5kg on legs", notes: "" },
+      { section: "CORE (handstand-specific)", name: "Ab Wheel Rollout", sets: 4, reps: "8–10", weight: "Bodyweight", notes: "Anti-extension core — the exact demand of a held handstand · Elevate feet when 3×10 easy" },
+      { section: null, name: "Hollow Body Hold", sets: 3, reps: "30–45s", weight: "Bodyweight", notes: "Mimics the handstand body line exactly · Extend duration before adding load" },
+      { section: null, name: "Straddle Press Negatives", sets: 3, reps: "3–5", weight: "Bodyweight", notes: "Lower slowly from handstand to straddle seated position · Feeds press-to-handstand long term" },
+      { section: "SHOULDER ACCESSORY", name: "Incline DB Press", sets: 3, reps: "10–12", weight: "20kg DBs", notes: "" },
+      { section: null, name: "Cable Pull-Over (straight arm)", sets: 3, reps: "12", weight: "32.5kg", notes: "" },
+      { section: null, name: "Rear Delt Fly (pause at top)", sets: 3, reps: "12–15", weight: "10kg DBs", notes: "" },
+      { section: null, name: "Band Pull-Aparts", sets: 3, reps: "20", weight: "Medium band", notes: "" },
+      { section: null, name: "Rotator Cuff External Rotation", sets: 2, reps: "15 each", weight: "5kg", notes: "" }
     ]
   },
   legsB: {
