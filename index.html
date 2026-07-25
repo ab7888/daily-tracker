@@ -16,28 +16,30 @@
 </head>
 <body>
 
-<header class="app-header">
-  <div class="header-top-row">
-    <div id="today-label" class="today-label">Loading…</div>
-    <button id="undo-btn" class="undo-btn" disabled aria-label="Undo last action" title="Undo last action">
-      <span class="icon" data-icon="undo"></span> Undo
-    </button>
-  </div>
-  <div id="score-label" class="score-label"><span class="icon" data-icon="medal"></span><span id="score-label-text">0 / 0 pts</span></div>
-  <div class="score-bar"><div id="score-bar-fill" class="score-bar-fill"></div></div>
-</header>
+<div class="sticky-top">
+  <header class="app-header">
+    <div class="header-top-row">
+      <div id="today-label" class="today-label">Loading…</div>
+      <button id="undo-btn" class="undo-btn" disabled aria-label="Undo last action" title="Undo last action">
+        <span class="icon" data-icon="undo"></span> Undo
+      </button>
+    </div>
+    <div id="score-label" class="score-label"><span class="icon" data-icon="medal"></span><span id="score-label-text">0 / 0 pts</span></div>
+    <div class="score-bar"><div id="score-bar-fill" class="score-bar-fill"></div></div>
+  </header>
 
-<nav class="tabs">
-  <button class="tab-btn active" data-tab="today">Today</button>
-  <button class="tab-btn" data-tab="training">Training</button>
-  <button class="tab-btn" data-tab="rightnow">Right Now</button>
-  <button class="tab-btn" data-tab="tomorrow">Tomorrow</button>
-  <button class="tab-btn" data-tab="projects">Projects</button>
-  <button class="tab-btn" data-tab="news">News</button>
-  <button class="tab-btn" data-tab="monthly">Monthly</button>
-  <button class="tab-btn" data-tab="archive">Archive</button>
-  <button class="tab-btn" data-tab="account">Account</button>
-</nav>
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="today">Today</button>
+    <button class="tab-btn" data-tab="training">Training</button>
+    <button class="tab-btn" data-tab="rightnow">Right Now</button>
+    <button class="tab-btn" data-tab="tomorrow">Tomorrow</button>
+    <button class="tab-btn" data-tab="projects">Projects</button>
+    <button class="tab-btn" data-tab="news">News</button>
+    <button class="tab-btn" data-tab="monthly">Monthly</button>
+    <button class="tab-btn" data-tab="archive">Archive</button>
+    <button class="tab-btn" data-tab="account">Account</button>
+  </nav>
+</div>
 
 <main>
 

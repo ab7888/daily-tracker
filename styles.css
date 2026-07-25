@@ -26,10 +26,16 @@ body {
   min-height: 100vh;
 }
 
-.app-header {
+/* Header + tabs share one sticky wrapper so they always stack as a unit —
+   no hardcoded pixel offset between them to fall out of sync whenever the
+   header's content (and so its height) changes. */
+.sticky-top {
   position: sticky;
   top: 0;
   z-index: 10;
+}
+
+.app-header {
   background: var(--bg-alt);
   border-bottom: 1px solid var(--border);
   padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
@@ -91,9 +97,6 @@ body {
 
 .tabs {
   display: flex;
-  position: sticky;
-  top: 76px;
-  z-index: 9;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
