@@ -256,7 +256,7 @@ main {
   width: 56px;
 }
 
-input, textarea {
+input, textarea, select {
   background: var(--bg);
   border: 1px solid var(--border);
   color: var(--text);
@@ -425,8 +425,14 @@ input[readonly] { opacity: 0.7; }
 
 .gym-row.today { color: var(--accent-bright); font-weight: 700; }
 
-.gym-day { width: 40px; font-size: 13px; }
-.gym-type { flex: 1; font-size: 13px; }
+.gym-day { width: 40px; font-size: 13px; flex-shrink: 0; }
+
+.gym-type-select {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  padding: 6px 8px;
+}
 
 .calendar-grid {
   display: grid;
@@ -594,6 +600,19 @@ input[readonly] { opacity: 0.7; }
   color: var(--muted);
   margin-top: 3px;
   line-height: 1.4;
+}
+
+.ex-actual {
+  width: 100%;
+  font-size: 13px;
+  padding: 6px 8px;
+  margin-top: 6px;
+}
+
+.ex-last {
+  font-size: 11px;
+  color: var(--accent-bright);
+  margin-top: 4px;
 }
 
 /* -------------------------------- Projects -------------------------------- */

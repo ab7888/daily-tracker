@@ -1,4 +1,4 @@
-const CACHE_NAME = "daily-tracker-v1";
+const CACHE_NAME = "daily-tracker-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -26,17 +26,31 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Network falling back to cache, so you get fresh content when online
-// and the app still works offline.
+// Only handle same-origin GET requests — the app shell (HTML/CSS/JS/icons).
+// Cross-origin requests (Supabase, weather, transport line status) are left
+// untouched so a failure surfaces as a normal rejected fetch() for the app's
+// own try/catch to handle, instead of this SW silently "succeeding" with a
+// cached HTML page standing in for what should have been a JSON response.
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
+  const req = event.request;
+  if (req.method !== "GET") return;
+  if (new URL(req.url).origin !== self.location.origin) return;
+
   event.respondWith(
-    fetch(event.request)
+    fetch(req)
       .then((res) => {
         const resClone = res.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
+        caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
         return res;
       })
-      .catch(() => caches.match(event.request).then((res) => res || caches.match("./index.html")))
+      .catch(() =>
+        caches.match(req).then((cached) => {
+          if (cached) return cached;
+          // Only stand in the app shell for actual page navigations — an
+          // uncached same-origin asset request should just fail normally.
+          if (req.mode === "navigate") return caches.match("./index.html");
+          return Response.error();
+        })
+      )
   );
 });

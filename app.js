@@ -207,7 +207,7 @@ const PANCAKE_EXERCISES = [
 ];
 
 function sessionForDay(dayIdx) {
-  const key = WEEKLY_SESSION_KEYS[dayIdx];
+  const key = state.weeklySessionKeys[dayIdx];
   return key ? TRAINING_SESSIONS[key] : null;
 }
 
@@ -259,9 +259,12 @@ function defaultState() {
     ].map(([label, points, icon]) => ({ id: uid(), label, points, done: false, time: "", icon })),
     timing: { sleep: "", lastMeal: "", gymFinish: "", lastCoffee: "", noScroll: false },
     gymSchedule: GYM_DAYS.map((day) => ({ day, done: false })),
+    weeklySessionKeys: WEEKLY_SESSION_KEYS.slice(),
     sideMissions,
     eliminateToday: { date: today, ids: pickRandomSubset(sideMissions, Math.min(5, sideMissions.length)) },
     projects: [],
+    trainingActuals: {},
+    trainingLog: {},
     training: { done: {}, rehabDone: {}, pancakeDone: {} },
     dailyLog: {},
     dayPlans: {},
@@ -349,6 +352,11 @@ function todayISO(date) {
 function todayDayIdx() {
   const dow = new Date().getDay(); // 0=Sun..6=Sat
   return dow === 0 ? 6 : dow - 1; // convert to 0=Mon..6=Sun
+}
+
+function formatDateShort(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString(undefined, { weekday: "short", day: "2-digit", month: "short" });
 }
 
 // Forward-compat merge/migration for a raw state blob, regardless of
@@ -681,6 +689,23 @@ function checkRollover() {
   state.timing = { sleep: "", lastMeal: "", gymFinish: "", lastCoffee: "", noScroll: false };
   state.training = { done: {}, rehabDone: {}, pancakeDone: {} };
 
+  // Archive any logged "actual" sets/reps/weight into per-session history —
+  // grouped by session key (parsed off the front of each exercise id, e.g.
+  // "legsA-3" -> "legsA") so it's there to check next time that session
+  // comes around, regardless of which day it lands on. Only the most recent
+  // logged session of each type is kept.
+  const actualsBySession = {};
+  Object.entries(state.trainingActuals).forEach(([id, value]) => {
+    if (!value || !value.trim()) return;
+    const sessionKey = id.slice(0, id.lastIndexOf("-"));
+    if (!actualsBySession[sessionKey]) actualsBySession[sessionKey] = {};
+    actualsBySession[sessionKey][id] = value.trim();
+  });
+  Object.entries(actualsBySession).forEach(([sessionKey, entries]) => {
+    state.trainingLog[sessionKey] = { date: state.currentDate, entries };
+  });
+  state.trainingActuals = {};
+
   // Apply whatever order/times were set on the "Plan for Tomorrow" tab, now
   // that tomorrow has arrived, then clear the plan for the next cycle.
   state.routineTasks = tomorrowPlanDisplayOrder();
@@ -894,17 +919,28 @@ function renderTiming() {
   $("#coffee-score").textContent = c.coffee === null ? "–" : c.coffee;
 }
 
+const SESSION_SELECT_OPTIONS = [
+  { key: "", label: "Rest" },
+  { key: "pushA", label: "Push A" },
+  { key: "pullA", label: "Pull A" },
+  { key: "legsA", label: "Legs A" },
+  { key: "pushB", label: "Push B" },
+  { key: "legsB", label: "Legs B" }
+];
+
 function renderGymSchedule() {
   const todayIdx = todayDayIdx();
   const el = $("#gym-schedule-list");
   el.innerHTML = "";
   state.gymSchedule.forEach((g, i) => {
-    const session = sessionForDay(i);
+    const currentKey = state.weeklySessionKeys[i] || "";
     const row = document.createElement("div");
     row.className = "gym-row" + (i === todayIdx ? " today" : "");
     row.innerHTML = `
       <span class="gym-day">${g.day}${i === todayIdx ? " ← today" : ""}</span>
-      <span class="gym-type">${esc(session ? session.shortTitle : "Rest")}</span>
+      <select class="gym-type-select" data-day-idx="${i}" aria-label="${g.day} session">
+        ${SESSION_SELECT_OPTIONS.map((o) => `<option value="${o.key}" ${o.key === currentKey ? "selected" : ""}>${o.label}</option>`).join("")}
+      </select>
       <button class="check-btn small" data-idx="${i}" id="gym-done-${i}">${g.done ? "✓" : "✗"}</button>
     `;
     el.appendChild(row);
@@ -1305,7 +1341,9 @@ function renderNews() {
 
 /* ------------------------------- Training -------------------------------- */
 
-function exerciseRowHtml(ex, checked, dataAttrs) {
+// actualId/lastActual are only passed for the main weekly-session exercises
+// (not Rehab/Pancake) — that's the "refer back next leg day" use case.
+function exerciseRowHtml(ex, checked, dataAttrs, actualId, lastActual) {
   return `
     <div class="ex-row">
       ${ex.section ? `<div class="ex-section">${esc(ex.section)}</div>` : ""}
@@ -1315,6 +1353,10 @@ function exerciseRowHtml(ex, checked, dataAttrs) {
           <div class="ex-name">${esc(ex.name)}</div>
           <div class="ex-meta">${esc(String(ex.sets))} × ${esc(String(ex.reps))} &middot; ${esc(ex.weight)}</div>
           <div class="ex-notes">${esc(ex.notes)}</div>
+          ${actualId ? `
+            <input type="text" class="ex-actual" data-actual-id="${actualId}" value="${esc(state.trainingActuals[actualId] || "")}" placeholder="Log actual sets/reps/weight…" />
+            ${lastActual ? `<div class="ex-last">Last time: ${esc(lastActual)}</div>` : ""}
+          ` : ""}
         </div>
       </div>
     </div>
@@ -1346,10 +1388,11 @@ function renderTraining() {
   } else {
     const isToday = trainingViewDay === todayIdx;
     const doneCount = session.exercises.filter((_, i) => state.training.done[exerciseId(session.key, i)]).length;
+    const lastEntry = state.trainingLog[session.key];
     sessionEl.innerHTML = `
       <h2>${isToday ? iconTag("pin") + " Today: " : ""}${esc(session.title)}</h2>
       <p class="hint">${esc(session.focus)}</p>
-      <p class="hint">${doneCount} / ${session.exercises.length} logged</p>
+      <p class="hint">${doneCount} / ${session.exercises.length} logged${lastEntry ? ` &middot; Last logged ${esc(formatDateShort(lastEntry.date))}` : ""}</p>
       <div id="training-exercise-list"></div>
       <button class="add-task-btn" id="training-complete-all" style="margin-top:10px;">${iconTag("checkCircle")} Mark all complete</button>
     `;
@@ -1357,7 +1400,8 @@ function renderTraining() {
     session.exercises.forEach((ex, i) => {
       const id = exerciseId(session.key, i);
       const checked = !!state.training.done[id];
-      listEl.insertAdjacentHTML("beforeend", exerciseRowHtml(ex, checked, `data-training-id="${id}"`));
+      const lastActual = lastEntry && lastEntry.entries[id];
+      listEl.insertAdjacentHTML("beforeend", exerciseRowHtml(ex, checked, `data-training-id="${id}"`, id, lastActual));
     });
   }
 
@@ -1692,19 +1736,30 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Project notes save via their own debounced listener rather than the usual
-// pushUndo()+renderAll() pattern — renderAll() rebuilds the whole projects
-// list from scratch, which would tear out the focused textarea (and the
-// cursor position in it) on every keystroke.
+// Project notes and logged workout "actuals" save via their own debounced
+// listeners rather than the usual pushUndo()+renderAll() pattern —
+// renderAll() rebuilds these lists from scratch, which would tear the
+// focused input (and cursor position) out from under the user mid-keystroke.
 let projectSaveTimer = null;
+let exActualSaveTimer = null;
 document.addEventListener("input", (e) => {
   const t = e.target;
-  if (!t.classList.contains("project-note")) return;
-  const proj = state.projects.find((p) => p.id === t.dataset.projectId);
-  if (!proj) return;
-  proj.content = t.value;
-  if (projectSaveTimer) clearTimeout(projectSaveTimer);
-  projectSaveTimer = setTimeout(saveState, 400);
+
+  if (t.classList.contains("project-note")) {
+    const proj = state.projects.find((p) => p.id === t.dataset.projectId);
+    if (!proj) return;
+    proj.content = t.value;
+    if (projectSaveTimer) clearTimeout(projectSaveTimer);
+    projectSaveTimer = setTimeout(saveState, 400);
+    return;
+  }
+
+  if (t.classList.contains("ex-actual")) {
+    state.trainingActuals[t.dataset.actualId] = t.value;
+    if (exActualSaveTimer) clearTimeout(exActualSaveTimer);
+    exActualSaveTimer = setTimeout(saveState, 400);
+    return;
+  }
 });
 
 document.addEventListener("change", (e) => {
@@ -1719,6 +1774,14 @@ document.addEventListener("change", (e) => {
       earnedInput.value = existing ? existing.earned : "";
       maxInput.value = existing ? existing.max : "";
     }
+    return;
+  }
+
+  if (t.classList.contains("gym-type-select")) {
+    pushUndo();
+    const idx = Number(t.dataset.dayIdx);
+    state.weeklySessionKeys[idx] = t.value || null;
+    renderAll();
     return;
   }
 
