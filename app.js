@@ -351,38 +351,45 @@ function todayDayIdx() {
   return dow === 0 ? 6 : dow - 1; // convert to 0=Mon..6=Sun
 }
 
+// Forward-compat merge/migration for a raw state blob, regardless of
+// whether it came from localStorage (loadState) or the cloud
+// (pullOrSeedCloudState) — one shared implementation so the two paths can't
+// drift out of sync with each other again (they did, once: a migration only
+// got added to loadState(), and cloud-pulling old-shaped data crashed).
+function normalizeStateBlob(raw) {
+  const base = defaultState();
+  // tomorrowPlan used to be a flat array of ad-hoc {id,label,points}
+  // entries; it's now { order, times } keyed to real routineTasks ids.
+  // Old-shaped data doesn't map onto the new format, so just start fresh.
+  const tomorrowPlan = (raw.tomorrowPlan && !Array.isArray(raw.tomorrowPlan))
+    ? { order: Array.isArray(raw.tomorrowPlan.order) ? raw.tomorrowPlan.order : [], times: raw.tomorrowPlan.times || {} }
+    : { order: [], times: {} };
+  const merged = Object.assign({}, base, raw, {
+    timing: Object.assign({}, base.timing, raw.timing),
+    monthly: Object.assign({}, base.monthly, raw.monthly),
+    training: Object.assign({}, base.training, raw.training),
+    dayPlans: Object.assign({}, base.dayPlans, raw.dayPlans),
+    tomorrowPlan
+  });
+  // Gym schedule day *labels* always come fresh from the current program —
+  // only the per-day "done" flags are worth keeping from a save.
+  if (Array.isArray(raw.gymSchedule)) {
+    merged.gymSchedule = GYM_DAYS.map((day, i) => ({
+      day,
+      done: !!(raw.gymSchedule[i] && raw.gymSchedule[i].done)
+    }));
+  }
+  migrateTaskIcons(merged.routineTasks, ROUTINE_ICON_MIGRATIONS);
+  migrateTaskIcons(merged.meals, MEALS_ICON_MIGRATIONS);
+  migrateTaskIcons(merged.sideMissions, {});
+  return merged;
+}
+
 function loadState() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return defaultState();
   try {
-    const parsed = JSON.parse(raw);
-    // fill in any missing fields from a default (forward-compat safety)
-    const base = defaultState();
-    // tomorrowPlan used to be a flat array of ad-hoc {id,label,points}
-    // entries; it's now { order, times } keyed to real routineTasks ids.
-    // Old-shaped data doesn't map onto the new format, so just start fresh.
-    const tomorrowPlan = (parsed.tomorrowPlan && !Array.isArray(parsed.tomorrowPlan))
-      ? { order: Array.isArray(parsed.tomorrowPlan.order) ? parsed.tomorrowPlan.order : [], times: parsed.tomorrowPlan.times || {} }
-      : { order: [], times: {} };
-    const merged = Object.assign({}, base, parsed, {
-      timing: Object.assign({}, base.timing, parsed.timing),
-      monthly: Object.assign({}, base.monthly, parsed.monthly),
-      training: Object.assign({}, base.training, parsed.training),
-      dayPlans: Object.assign({}, base.dayPlans, parsed.dayPlans),
-      tomorrowPlan
-    });
-    // Gym schedule day *labels* always come fresh from the current program —
-    // only the per-day "done" flags are worth keeping from a save.
-    if (Array.isArray(parsed.gymSchedule)) {
-      merged.gymSchedule = GYM_DAYS.map((day, i) => ({
-        day,
-        done: !!(parsed.gymSchedule[i] && parsed.gymSchedule[i].done)
-      }));
-    }
-    migrateTaskIcons(merged.routineTasks, ROUTINE_ICON_MIGRATIONS);
-    migrateTaskIcons(merged.meals, MEALS_ICON_MIGRATIONS);
-    migrateTaskIcons(merged.sideMissions, {});
-    return merged;
+    return normalizeStateBlob(JSON.parse(raw));
   } catch (e) {
     console.error("Failed to parse saved state, starting fresh.", e);
     return defaultState();
@@ -433,29 +440,6 @@ async function initAuth() {
   });
 }
 
-// Reapplies the same forward-compat merge/migration loadState() does for a
-// freshly-parsed blob, so a state pulled from the cloud gets the same
-// treatment as one loaded from localStorage.
-function normalizeIncomingState(raw) {
-  const base = defaultState();
-  const merged = Object.assign({}, base, raw, {
-    timing: Object.assign({}, base.timing, raw.timing),
-    monthly: Object.assign({}, base.monthly, raw.monthly),
-    training: Object.assign({}, base.training, raw.training),
-    dayPlans: Object.assign({}, base.dayPlans, raw.dayPlans)
-  });
-  if (Array.isArray(raw.gymSchedule)) {
-    merged.gymSchedule = GYM_DAYS.map((day, i) => ({
-      day,
-      done: !!(raw.gymSchedule[i] && raw.gymSchedule[i].done)
-    }));
-  }
-  migrateTaskIcons(merged.routineTasks, ROUTINE_ICON_MIGRATIONS);
-  migrateTaskIcons(merged.meals, MEALS_ICON_MIGRATIONS);
-  migrateTaskIcons(merged.sideMissions, {});
-  return merged;
-}
-
 async function pullOrSeedCloudState() {
   if (!supabaseClient || !currentUser) return;
   setSyncStatus("syncing");
@@ -467,7 +451,7 @@ async function pullOrSeedCloudState() {
       .maybeSingle();
     if (error) throw error;
     if (data && data.state) {
-      state = normalizeIncomingState(data.state);
+      state = normalizeStateBlob(data.state);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       renderAll();
     } else {
@@ -1088,7 +1072,8 @@ function renderRightNow() {
 function tomorrowPlanDisplayOrder() {
   const byId = new Map(state.routineTasks.map((t) => [t.id, t]));
   const ordered = [];
-  state.tomorrowPlan.order.forEach((id) => {
+  const order = (state.tomorrowPlan && Array.isArray(state.tomorrowPlan.order)) ? state.tomorrowPlan.order : [];
+  order.forEach((id) => {
     if (byId.has(id)) {
       ordered.push(byId.get(id));
       byId.delete(id);
