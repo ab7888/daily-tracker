@@ -221,6 +221,20 @@ function exerciseId(sessionKey, idx) {
   return `${sessionKey}-${idx}`;
 }
 
+// Once every exercise in *today's* scheduled session is logged, auto-check
+// the Gym Schedule box for today so the daily score reflects it without an
+// extra manual tap. One-directional — unticking a single exercise afterward
+// won't claw the bonus back. Shared by the checkbox toggle and the Log
+// button, since both can be what finally completes the session.
+function maybeAutoCheckGymBonus() {
+  const todayIdx = todayDayIdx();
+  const session = sessionForDay(trainingViewDay);
+  if (session && trainingViewDay === todayIdx) {
+    const allDone = session.exercises.every((_, i) => state.training.done[exerciseId(session.key, i)]);
+    if (allDone) state.gymSchedule[todayIdx].done = true;
+  }
+}
+
 let uidCounter = 1;
 function uid() { return "id" + (uidCounter++) + "_" + Math.random().toString(36).slice(2, 7); }
 
@@ -1361,7 +1375,10 @@ function exerciseRowHtml(ex, checked, dataAttrs, actualId, lastActual) {
           <div class="ex-meta">${esc(String(ex.sets))} × ${esc(String(ex.reps))} &middot; ${esc(ex.weight)}</div>
           <div class="ex-notes">${esc(ex.notes)}</div>
           ${actualId ? `
-            <input type="text" class="ex-actual" data-actual-id="${actualId}" value="${esc(state.trainingActuals[actualId] || "")}" placeholder="Log actual sets/reps/weight…" />
+            <div class="ex-actual-row">
+              <input type="text" class="ex-actual" data-actual-id="${actualId}" value="${esc(state.trainingActuals[actualId] || "")}" placeholder="Log actual sets/reps/weight…" />
+              <button class="ex-log-btn" data-actual-id="${actualId}">${iconTag("checkCircle")} Log</button>
+            </div>
             ${lastActual ? `<div class="ex-last">Last time: ${esc(lastActual)}</div>` : ""}
           ` : ""}
         </div>
@@ -1614,16 +1631,22 @@ document.addEventListener("click", (e) => {
     pushUndo();
     const id = t.dataset.trainingId;
     state.training.done[id] = !state.training.done[id];
-    // Nice-to-have: once every exercise in *today's* session is logged,
-    // auto-check the Gym Schedule box for today so the daily score reflects
-    // it without an extra manual tap. One-directional — unticking a single
-    // exercise afterward won't claw the bonus back.
-    const todayIdx = todayDayIdx();
-    const session = sessionForDay(trainingViewDay);
-    if (session && trainingViewDay === todayIdx) {
-      const allDone = session.exercises.every((_, i) => state.training.done[exerciseId(session.key, i)]);
-      if (allDone) state.gymSchedule[todayIdx].done = true;
-    }
+    maybeAutoCheckGymBonus();
+    renderAll();
+    return;
+  }
+
+  if (t.classList.contains("ex-log-btn")) {
+    const id = t.dataset.actualId;
+    const row = t.closest(".ex-row");
+    const input = row && row.querySelector(".ex-actual");
+    const value = input ? input.value.trim() : "";
+    pushUndo();
+    if (value) state.trainingActuals[id] = value;
+    // Logging your actual performance implies you did the exercise — one tap
+    // instead of typing the actual *and* separately ticking the checkbox.
+    state.training.done[id] = true;
+    maybeAutoCheckGymBonus();
     renderAll();
     return;
   }
