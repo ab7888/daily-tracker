@@ -221,6 +221,26 @@ function exerciseId(sessionKey, idx) {
   return `${sessionKey}-${idx}`;
 }
 
+// The full exercise list for a session — the fixed program exercises plus
+// any the user has added via the Training tab's "Add Exercise" box. Each
+// entry is { ex, id, custom } so callers don't care where it came from.
+// state.training.done and state.trainingActuals are both keyed by `id`.
+function sessionExerciseEntries(session) {
+  const builtin = session.exercises.map((ex, i) => ({ ex, id: exerciseId(session.key, i), custom: false }));
+  const custom = (state.customExercises[session.key] || []).map((ex) => ({ ex, id: ex.id, custom: true }));
+  return builtin.concat(custom);
+}
+
+// Look up an exercise definition from an id, whether it's a built-in
+// (`legsA-3`) or a custom one (`legsA-c<uid>`). Used when archiving a logged
+// session into trainingHistory so the report can show what was prescribed.
+function resolveExercise(sessionKey, id) {
+  const session = TRAINING_SESSIONS[sessionKey];
+  const m = /-(\d+)$/.exec(id);
+  if (session && m) return session.exercises[Number(m[1])] || null;
+  return (state.customExercises[sessionKey] || []).find((e) => e.id === id) || null;
+}
+
 // Once every exercise in *today's* scheduled session is logged, auto-check
 // the Gym Schedule box for today so the daily score reflects it without an
 // extra manual tap. One-directional — unticking a single exercise afterward
@@ -230,7 +250,7 @@ function maybeAutoCheckGymBonus() {
   const todayIdx = todayDayIdx();
   const session = sessionForDay(trainingViewDay);
   if (session && trainingViewDay === todayIdx) {
-    const allDone = session.exercises.every((_, i) => state.training.done[exerciseId(session.key, i)]);
+    const allDone = sessionExerciseEntries(session).every((e) => state.training.done[e.id]);
     if (allDone) state.gymSchedule[todayIdx].done = true;
   }
 }
@@ -285,6 +305,8 @@ function defaultState() {
     projects: [],
     trainingActuals: {},
     trainingLog: {},
+    trainingHistory: [],
+    customExercises: {},
     training: { done: {}, rehabDone: {}, pancakeDone: {} },
     dailyLog: {},
     dayPlans: {},
@@ -396,6 +418,8 @@ function normalizeStateBlob(raw) {
     timing: Object.assign({}, base.timing, raw.timing),
     monthly: Object.assign({}, base.monthly, raw.monthly),
     training: Object.assign({}, base.training, raw.training),
+    customExercises: Object.assign({}, base.customExercises, raw.customExercises),
+    trainingHistory: Array.isArray(raw.trainingHistory) ? raw.trainingHistory : [],
     dayPlans: Object.assign({}, base.dayPlans, raw.dayPlans),
     tomorrowPlan
   });
@@ -723,7 +747,29 @@ function checkRollover() {
   });
   Object.entries(actualsBySession).forEach(([sessionKey, entries]) => {
     state.trainingLog[sessionKey] = { date: state.currentDate, entries };
+    // Also append to the permanent per-day history that the Monthly
+    // Training Report reads from. trainingLog only keeps the *latest*
+    // session of each type; trainingHistory keeps every logged day.
+    const session = TRAINING_SESSIONS[sessionKey];
+    const lines = Object.entries(entries).map(([id, actual]) => {
+      const ex = resolveExercise(sessionKey, id);
+      return {
+        name: ex ? ex.name : id,
+        target: ex ? `${ex.sets} × ${ex.reps} · ${ex.weight}` : "",
+        actual
+      };
+    });
+    state.trainingHistory.push({
+      date: state.currentDate,
+      sessionKey,
+      title: session ? session.title : sessionKey,
+      lines
+    });
   });
+  // Guard against unbounded growth (roughly two years of daily sessions).
+  if (state.trainingHistory.length > 800) {
+    state.trainingHistory = state.trainingHistory.slice(-800);
+  }
   state.trainingActuals = {};
 
   // Apply whatever order/times were set on the "Plan for Tomorrow" tab, now
@@ -1364,16 +1410,16 @@ function renderNews() {
 
 // actualId/lastActual are only passed for the main weekly-session exercises
 // (not Rehab/Pancake) — that's the "refer back next leg day" use case.
-function exerciseRowHtml(ex, checked, dataAttrs, actualId, lastActual) {
+function exerciseRowHtml(ex, checked, dataAttrs, actualId, lastActual, removeId) {
   return `
     <div class="ex-row">
       ${ex.section ? `<div class="ex-section">${esc(ex.section)}</div>` : ""}
       <div class="ex-line">
         <button class="check-btn small" ${dataAttrs}>${checked ? "✓" : "✗"}</button>
         <div class="ex-info">
-          <div class="ex-name">${esc(ex.name)}</div>
+          <div class="ex-name">${esc(ex.name)}${removeId ? ` <span class="ex-custom-tag">added</span>` : ""}</div>
           <div class="ex-meta">${esc(String(ex.sets))} × ${esc(String(ex.reps))} &middot; ${esc(ex.weight)}</div>
-          <div class="ex-notes">${esc(ex.notes)}</div>
+          ${ex.notes ? `<div class="ex-notes">${esc(ex.notes)}</div>` : ""}
           ${actualId ? `
             <div class="ex-actual-row">
               <input type="text" class="ex-actual" data-actual-id="${actualId}" value="${esc(state.trainingActuals[actualId] || "")}" placeholder="Log actual sets/reps/weight…" />
@@ -1382,6 +1428,7 @@ function exerciseRowHtml(ex, checked, dataAttrs, actualId, lastActual) {
             ${lastActual ? `<div class="ex-last">Last time: ${esc(lastActual)}</div>` : ""}
           ` : ""}
         </div>
+        ${removeId ? `<button class="ex-remove-btn" data-remove-custom-id="${esc(removeId)}" aria-label="Remove exercise" title="Remove">${iconTag("trash")}</button>` : ""}
       </div>
     </div>
   `;
@@ -1404,29 +1451,36 @@ function renderTraining() {
 
   const session = sessionForDay(trainingViewDay);
   const sessionEl = $("#training-session");
+  const addCard = $("#training-add-card");
   if (!session) {
     sessionEl.innerHTML = `
       <h2>${iconTag("moon")} Rest Day</h2>
       <p class="hint">No lifting session scheduled${trainingViewDay === todayIdx ? " today" : ""}. Good day for the Pancake Program below, or just recover.</p>
     `;
+    if (addCard) addCard.hidden = true;
   } else {
     const isToday = trainingViewDay === todayIdx;
-    const doneCount = session.exercises.filter((_, i) => state.training.done[exerciseId(session.key, i)]).length;
+    const entries = sessionExerciseEntries(session);
+    const doneCount = entries.filter((e) => state.training.done[e.id]).length;
     const lastEntry = state.trainingLog[session.key];
     sessionEl.innerHTML = `
       <h2>${isToday ? iconTag("pin") + " Today: " : ""}${esc(session.title)}</h2>
       <p class="hint">${esc(session.focus)}</p>
-      <p class="hint">${doneCount} / ${session.exercises.length} logged${lastEntry ? ` &middot; Last logged ${esc(formatDateShort(lastEntry.date))}` : ""}</p>
+      <p class="hint">${doneCount} / ${entries.length} logged${lastEntry ? ` &middot; Last logged ${esc(formatDateShort(lastEntry.date))}` : ""}</p>
       <div id="training-exercise-list"></div>
       <button class="add-task-btn" id="training-complete-all" style="margin-top:10px;">${iconTag("checkCircle")} Mark all complete</button>
     `;
     const listEl = $("#training-exercise-list", sessionEl);
-    session.exercises.forEach((ex, i) => {
-      const id = exerciseId(session.key, i);
-      const checked = !!state.training.done[id];
-      const lastActual = lastEntry && lastEntry.entries[id];
-      listEl.insertAdjacentHTML("beforeend", exerciseRowHtml(ex, checked, `data-training-id="${id}"`, id, lastActual));
+    entries.forEach((e) => {
+      const checked = !!state.training.done[e.id];
+      const lastActual = lastEntry && lastEntry.entries[e.id];
+      listEl.insertAdjacentHTML("beforeend", exerciseRowHtml(e.ex, checked, `data-training-id="${e.id}"`, e.id, lastActual, e.custom ? e.id : null));
     });
+    if (addCard) {
+      addCard.hidden = false;
+      const hintEl = $("#training-add-hint", addCard);
+      if (hintEl) hintEl.textContent = `Adds to ${session.shortTitle} permanently, in the same format as the exercises above.`;
+    }
   }
 
   // Rehab & Maintenance (always available, daily).
@@ -1446,6 +1500,67 @@ function renderTraining() {
     const checked = !!state.training.pancakeDone[i];
     pancakeEl.insertAdjacentHTML("beforeend", exerciseRowHtml(ex, checked, `data-pancake-idx="${i}"`));
   });
+}
+
+// Plain-text summary of every logged training session in the current
+// calendar month, built from state.trainingHistory (archived on each day
+// rollover) plus whatever's logged-but-not-yet-archived for today. Meant
+// to be copied straight into a message to Claude.
+function buildTrainingReport() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth() + 1;
+  const monthPrefix = `${y}-${String(m).padStart(2, "0")}`;
+
+  const sessions = (state.trainingHistory || [])
+    .filter((s) => typeof s.date === "string" && s.date.startsWith(monthPrefix))
+    .map((s) => ({ date: s.date, title: s.title, lines: s.lines || [] }));
+
+  // Today's session — logged but still sitting in trainingActuals until the
+  // next rollover. Group by session key the same way checkRollover() does.
+  const todayBySession = {};
+  Object.entries(state.trainingActuals).forEach(([id, value]) => {
+    if (!value || !value.trim()) return;
+    const key = id.slice(0, id.lastIndexOf("-"));
+    if (!todayBySession[key]) todayBySession[key] = [];
+    const ex = resolveExercise(key, id);
+    todayBySession[key].push({
+      name: ex ? ex.name : id,
+      target: ex ? `${ex.sets} × ${ex.reps} · ${ex.weight}` : "",
+      actual: value.trim()
+    });
+  });
+  Object.entries(todayBySession).forEach(([key, lines]) => {
+    const session = TRAINING_SESSIONS[key];
+    sessions.push({ date: state.currentDate, title: (session ? session.title : key) + " (in progress)", lines });
+  });
+
+  sessions.sort((a, b) => a.date.localeCompare(b.date));
+
+  const out = [];
+  out.push(`TRAINING LOG — ${MONTH_NAMES[m - 1]} ${y}`);
+  out.push("");
+
+  if (sessions.length === 0) {
+    out.push("No sessions logged yet this month.");
+    return out.join("\n");
+  }
+
+  sessions.forEach((s) => {
+    out.push(`=== ${formatDateShort(s.date)} · ${s.title} ===`);
+    if (s.lines.length === 0) {
+      out.push("  (no exercises logged)");
+    } else {
+      s.lines.forEach((ln) => {
+        out.push(`  ${ln.name}${ln.target ? `  [target ${ln.target}]` : ""}`);
+        out.push(`    did: ${ln.actual}`);
+      });
+    }
+    out.push("");
+  });
+
+  out.push(`${sessions.length} session${sessions.length === 1 ? "" : "s"} logged this month.`);
+  return out.join("\n");
 }
 
 /* ------------------------------ Event wiring ----------------------------- */
@@ -1651,6 +1766,67 @@ document.addEventListener("click", (e) => {
     return;
   }
 
+  if (t.id === "training-add-exercise") {
+    const session = sessionForDay(trainingViewDay);
+    if (!session) return;
+    const val = (id) => ($("#" + id) ? $("#" + id).value.trim() : "");
+    const name = val("cx-name");
+    if (!name) {
+      alert("Give the exercise a name.");
+      return;
+    }
+    pushUndo();
+    if (!state.customExercises[session.key]) state.customExercises[session.key] = [];
+    state.customExercises[session.key].push({
+      id: `${session.key}-c${uid()}`,
+      section: val("cx-section"),
+      name,
+      sets: val("cx-sets") || "—",
+      reps: val("cx-reps") || "—",
+      weight: val("cx-weight") || "—",
+      notes: val("cx-notes")
+    });
+    ["cx-section", "cx-name", "cx-sets", "cx-reps", "cx-weight", "cx-notes"].forEach((id) => {
+      if ($("#" + id)) $("#" + id).value = "";
+    });
+    renderAll();
+    return;
+  }
+
+  if (t.dataset && t.dataset.removeCustomId) {
+    const removeId = t.dataset.removeCustomId;
+    const sessionKey = removeId.slice(0, removeId.lastIndexOf("-"));
+    const list = state.customExercises[sessionKey];
+    if (!list) return;
+    if (!confirm("Remove this added exercise?")) return;
+    pushUndo();
+    state.customExercises[sessionKey] = list.filter((e) => e.id !== removeId);
+    delete state.training.done[removeId];
+    delete state.trainingActuals[removeId];
+    renderAll();
+    return;
+  }
+
+  if (t.id === "training-report-btn") {
+    const report = buildTrainingReport();
+    const out = $("#training-report-output");
+    const status = $("#training-report-status");
+    out.value = report;
+    out.hidden = false;
+    out.style.height = "auto";
+    out.style.height = Math.min(out.scrollHeight + 4, 360) + "px";
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(report).then(
+        () => { if (status) { status.textContent = "Copied to clipboard — paste it to Claude."; status.hidden = false; } },
+        () => { if (status) { status.textContent = "Select the text below and copy it."; status.hidden = false; } }
+      );
+    } else if (status) {
+      status.textContent = "Select the text below and copy it.";
+      status.hidden = false;
+    }
+    return;
+  }
+
   if (t.dataset && t.dataset.rehabIdx) {
     pushUndo();
     const idx = Number(t.dataset.rehabIdx);
@@ -1671,7 +1847,7 @@ document.addEventListener("click", (e) => {
     pushUndo();
     const session = sessionForDay(trainingViewDay);
     if (session) {
-      session.exercises.forEach((_, i) => { state.training.done[exerciseId(session.key, i)] = true; });
+      sessionExerciseEntries(session).forEach((e) => { state.training.done[e.id] = true; });
       const todayIdx = todayDayIdx();
       if (trainingViewDay === todayIdx) state.gymSchedule[todayIdx].done = true;
     }

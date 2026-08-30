@@ -664,6 +664,63 @@ input[readonly] { opacity: 0.7; }
   margin-top: 4px;
 }
 
+.ex-custom-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 4px;
+  margin-left: 4px;
+  vertical-align: 1px;
+}
+
+.ex-remove-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 2px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.ex-remove-btn .icon { width: 15px; height: 15px; color: inherit; }
+
+/* "Add Exercise" form on the Training tab */
+.ex-add {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.ex-add input[type="text"] { width: 100%; }
+
+.ex-add-grid {
+  display: flex;
+  gap: 6px;
+}
+
+.ex-add-grid input[type="text"] {
+  flex: 1;
+  min-width: 0;
+}
+
+.ex-add .add-task-btn { align-self: flex-start; margin-top: 2px; }
+
+.report-output {
+  width: 100%;
+  margin-top: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: pre;
+  overflow: auto;
+  resize: vertical;
+}
+
 /* -------------------------------- Projects -------------------------------- */
 
 .project-header {

@@ -154,6 +154,30 @@
 
     <div class="card" id="training-session"></div>
 
+    <div class="card" id="training-add-card">
+      <h2><span class="icon" data-icon="dumbbell"></span> Add Exercise</h2>
+      <p class="hint" id="training-add-hint">Adds to this day's routine, in the same format as the exercises above.</p>
+      <div class="ex-add">
+        <input id="cx-section" type="text" placeholder="Section header — optional (e.g. ACCESSORY)" data-enter-target="training-add-exercise" />
+        <input id="cx-name" type="text" placeholder="Exercise name" data-enter-target="training-add-exercise" />
+        <div class="ex-add-grid">
+          <input id="cx-sets" type="text" placeholder="Sets" data-enter-target="training-add-exercise" />
+          <input id="cx-reps" type="text" placeholder="Reps" data-enter-target="training-add-exercise" />
+          <input id="cx-weight" type="text" placeholder="Weight" data-enter-target="training-add-exercise" />
+        </div>
+        <input id="cx-notes" type="text" placeholder="Notes — optional" data-enter-target="training-add-exercise" />
+        <button id="training-add-exercise" class="add-task-btn">+ Add exercise</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="icon" data-icon="clipboard"></span> Monthly Training Report</h2>
+      <p class="hint">A plain-text summary of every logged session this month — copy it and send to Claude.</p>
+      <button id="training-report-btn" class="add-task-btn">Generate report</button>
+      <p class="hint" id="training-report-status" hidden></p>
+      <textarea id="training-report-output" class="report-output" readonly hidden></textarea>
+    </div>
+
     <div class="card">
       <h2><span class="icon" data-icon="lotus"></span> Rehab &amp; Maintenance</h2>
       <p class="hint">Daily, or before every session. 15–20 min.</p>
