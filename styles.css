@@ -697,6 +697,16 @@ input[readonly] { opacity: 0.7; }
 }
 
 .ex-add input[type="text"] { width: 100%; }
+.ex-add select { width: 100%; }
+
+.ex-add-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-bottom: -2px;
+}
 
 .ex-add-grid {
   display: flex;

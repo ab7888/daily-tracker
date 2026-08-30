@@ -223,12 +223,47 @@ function exerciseId(sessionKey, idx) {
 
 // The full exercise list for a session — the fixed program exercises plus
 // any the user has added via the Training tab's "Add Exercise" box. Each
-// entry is { ex, id, custom } so callers don't care where it came from.
-// state.training.done and state.trainingActuals are both keyed by `id`.
+// entry is { ex, id, custom, section, showSection } so callers don't care
+// where it came from. state.training.done and state.trainingActuals are
+// both keyed by `id`. Custom exercises are spliced in next to the last
+// exercise sharing their chosen section heading (so an "added" MAIN
+// STRENGTH lift sits with the other MAIN STRENGTH lifts, not at the end);
+// a custom exercise with no section, or one whose section no longer
+// exists, falls to the bottom.
 function sessionExerciseEntries(session) {
-  const builtin = session.exercises.map((ex, i) => ({ ex, id: exerciseId(session.key, i), custom: false }));
-  const custom = (state.customExercises[session.key] || []).map((ex) => ({ ex, id: ex.id, custom: true }));
-  return builtin.concat(custom);
+  const entries = [];
+  let cur = null;
+  session.exercises.forEach((ex, i) => {
+    if (ex.section) cur = ex.section;
+    entries.push({ ex, id: exerciseId(session.key, i), custom: false, section: cur });
+  });
+  (state.customExercises[session.key] || []).forEach((ex) => {
+    const wanted = ex.section || null;
+    let insertAt = -1;
+    for (let i = 0; i < entries.length; i++) {
+      if ((entries[i].section || null) === wanted) insertAt = i;
+    }
+    const entry = { ex, id: ex.id, custom: true, section: wanted };
+    if (insertAt === -1) entries.push(entry);
+    else entries.splice(insertAt + 1, 0, entry);
+  });
+  // Header shows only where the section changes from the row above.
+  let prev = null;
+  entries.forEach((e, i) => {
+    e.showSection = (i === 0 || (e.section || null) !== (prev || null)) ? (e.section || "") : "";
+    prev = e.section;
+  });
+  return entries;
+}
+
+// Distinct section headings in a session, in order — the options offered
+// by the "Add Exercise" section picker.
+function sessionSections(session) {
+  const seen = [];
+  session.exercises.forEach((ex) => {
+    if (ex.section && !seen.includes(ex.section)) seen.push(ex.section);
+  });
+  return seen;
 }
 
 // Look up an exercise definition from an id, whether it's a built-in
@@ -1410,10 +1445,11 @@ function renderNews() {
 
 // actualId/lastActual are only passed for the main weekly-session exercises
 // (not Rehab/Pancake) — that's the "refer back next leg day" use case.
-function exerciseRowHtml(ex, checked, dataAttrs, actualId, lastActual, removeId) {
+function exerciseRowHtml(ex, checked, dataAttrs, actualId, lastActual, removeId, sectionLabel) {
+  const section = sectionLabel === undefined ? ex.section : sectionLabel;
   return `
     <div class="ex-row">
-      ${ex.section ? `<div class="ex-section">${esc(ex.section)}</div>` : ""}
+      ${section ? `<div class="ex-section">${esc(section)}</div>` : ""}
       <div class="ex-line">
         <button class="check-btn small" ${dataAttrs}>${checked ? "✓" : "✗"}</button>
         <div class="ex-info">
@@ -1474,12 +1510,17 @@ function renderTraining() {
     entries.forEach((e) => {
       const checked = !!state.training.done[e.id];
       const lastActual = lastEntry && lastEntry.entries[e.id];
-      listEl.insertAdjacentHTML("beforeend", exerciseRowHtml(e.ex, checked, `data-training-id="${e.id}"`, e.id, lastActual, e.custom ? e.id : null));
+      listEl.insertAdjacentHTML("beforeend", exerciseRowHtml(e.ex, checked, `data-training-id="${e.id}"`, e.id, lastActual, e.custom ? e.id : null, e.showSection));
     });
     if (addCard) {
       addCard.hidden = false;
       const hintEl = $("#training-add-hint", addCard);
-      if (hintEl) hintEl.textContent = `Adds to ${session.shortTitle} permanently, in the same format as the exercises above.`;
+      if (hintEl) hintEl.textContent = `Adds to ${session.shortTitle} permanently — it comes back every ${session.shortTitle} day.`;
+      const secSel = $("#cx-section");
+      if (secSel) {
+        secSel.innerHTML = `<option value="">— No section —</option>` +
+          sessionSections(session).map((s) => `<option value="${esc(s)}">${esc(s)}</option>`).join("");
+      }
     }
   }
 
