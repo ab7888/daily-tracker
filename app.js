@@ -60,7 +60,8 @@ const ICON_SVG = {
   rain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 5.5a4 4 0 0 1-.7 7.94"/><line x1="8" y1="18" x2="8" y2="21"/><line x1="12" y1="18" x2="12" y2="21"/><line x1="16" y1="18" x2="16" y2="21"/></svg>',
   snow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 14a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 4.5a4 4 0 0 1-.7 7.94"/><path d="M8 18v3M6.5 19.5h3M12 18v3M10.5 19.5h3M16 18v3M14.5 19.5h3"/></svg>',
   storm: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 3.5a4 4 0 0 1-.7 7.94"/><path d="M13 14l-4 6h3l-1 5 5-7h-3l1-4Z"/></svg>',
-  refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>'
+  refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
+  heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.35-9.5-8.8C.8 7.9 2.4 4.5 6 4.1c2-.2 3.6.8 6 3.1 2.4-2.3 4-3.3 6-3.1 3.6.4 5.2 3.8 3.5 7.1C19 15.65 12 20 12 20Z"/><path d="M6 11.5h2.5l1.5-2.5 2 5 1.5-2.5H16"/></svg>'
 };
 
 function injectIcons() {
@@ -274,6 +275,27 @@ function resolveExercise(sessionKey, id) {
   const m = /-(\d+)$/.exec(id);
   if (session && m) return session.exercises[Number(m[1])] || null;
   return (state.customExercises[sessionKey] || []).find((e) => e.id === id) || null;
+}
+
+// Every logged rep/set/weight for one exercise, newest first — powers the
+// history view opened by tapping an exercise. Reads straight off
+// trainingHistory (already the source for the Monthly Training Report)
+// instead of keeping a second, per-exercise log that could drift out of
+// sync with it — one history, two views onto it. Includes today's
+// not-yet-archived entry, if there is one, marked in-progress.
+function exerciseHistoryFor(id) {
+  const out = [];
+  (state.trainingHistory || []).forEach((s) => {
+    (s.lines || []).forEach((ln) => {
+      if (ln.id === id) out.push({ date: s.date, actual: ln.actual, target: ln.target });
+    });
+  });
+  const inProgress = state.trainingActuals[id];
+  if (inProgress && inProgress.trim()) {
+    out.push({ date: state.currentDate, actual: inProgress.trim(), target: null, inProgress: true });
+  }
+  out.sort((a, b) => b.date.localeCompare(a.date));
+  return out;
 }
 
 // Once every exercise in *today's* scheduled session is logged, auto-check
@@ -789,6 +811,7 @@ function checkRollover() {
     const lines = Object.entries(entries).map(([id, actual]) => {
       const ex = resolveExercise(sessionKey, id);
       return {
+        id,
         name: ex ? ex.name : id,
         target: ex ? `${ex.sets} × ${ex.reps} · ${ex.weight}` : "",
         actual
@@ -821,6 +844,19 @@ function checkRollover() {
   saveState();
 }
 
+// A day's resting-heart-rate reading is a plain number, not an achievement
+// toggle, so it never contributes to totalPts — this just averages whatever
+// got logged. Shared by the live Monthly view and the archive snapshot so
+// the two can't disagree on what counts as "logged".
+function averageRHR(days) {
+  let sum = 0, count = 0;
+  Object.values(days).forEach((d) => {
+    const v = Number(d.rhr);
+    if (d.rhr !== "" && d.rhr != null && !Number.isNaN(v)) { sum += v; count++; }
+  });
+  return count ? { avg: Math.round(sum / count), count } : null;
+}
+
 function archiveMonth(year, month) {
   const days = state.monthly.days || {};
   let gym = 0, sauna = 0, redlight = 0, hbot = 0, totalPts = 0, bestDay = 0;
@@ -837,7 +873,8 @@ function archiveMonth(year, month) {
   // avoid duplicate archive entries
   if (state.archive.some((a) => a.label === label)) return;
   if (Object.keys(days).length === 0) return; // nothing tracked, skip
-  state.archive.unshift({ label, gym, sauna, redlight, hbot, totalPts, bestDay });
+  const rhr = averageRHR(days);
+  state.archive.unshift({ label, gym, sauna, redlight, hbot, totalPts, bestDay, avgRHR: rhr ? rhr.avg : null });
 }
 
 /* -------------------------------- Render -------------------------------- */
@@ -1111,11 +1148,11 @@ function renderMonthly() {
   let totalPts = 0;
   const header = document.createElement("div");
   header.className = "monthly-row monthly-header";
-  header.innerHTML = `<span>DATE</span><span>${iconTag("dumbbell")} GYM</span><span>${iconTag("sauna")} SAUNA</span><span>${iconTag("sun")} RED LIGHT</span><span>${iconTag("wind")} HBOT</span><span>PTS</span>`;
+  header.innerHTML = `<span>DATE</span><span>${iconTag("dumbbell")} GYM</span><span>${iconTag("sauna")} SAUNA</span><span>${iconTag("sun")} RED LIGHT</span><span>${iconTag("wind")} HBOT</span><span>${iconTag("heart")} RHR</span><span>PTS</span>`;
   el.appendChild(header);
   for (let day = 1; day <= daysInMonth; day++) {
     const key = String(day);
-    const d = m.days[key] || { gym: false, sauna: false, redlight: false, hbot: false };
+    const d = m.days[key] || { gym: false, sauna: false, redlight: false, hbot: false, rhr: "" };
     const pts = (d.gym ? 10 : 0) + (d.sauna ? 5 : 0) + (d.redlight ? 5 : 0) + (d.hbot ? 8 : 0);
     totalPts += pts;
     const dateObj = new Date(m.year, m.month - 1, day);
@@ -1128,11 +1165,13 @@ function renderMonthly() {
       <button class="check-btn small" data-field="sauna" data-day="${day}">${d.sauna ? "✓" : "✗"}</button>
       <button class="check-btn small" data-field="redlight" data-day="${day}">${d.redlight ? "✓" : "✗"}</button>
       <button class="check-btn small" data-field="hbot" data-day="${day}">${d.hbot ? "✓" : "✗"}</button>
+      <input type="number" inputmode="numeric" class="rhr-input" data-day="${day}" value="${esc(d.rhr || "")}" placeholder="–" min="30" max="220" />
       <span>${pts}</span>
     `;
     el.appendChild(row);
   }
-  $("#monthly-total").textContent = `Total: ${totalPts} pts`;
+  const rhr = averageRHR(m.days);
+  $("#monthly-total").textContent = `Total: ${totalPts} pts${rhr ? ` · Avg RHR: ${rhr.avg} bpm (${rhr.count} day${rhr.count === 1 ? "" : "s"})` : ""}`;
 }
 
 function renderArchive() {
@@ -1147,7 +1186,7 @@ function renderArchive() {
     row.className = "archive-row";
     row.innerHTML = `
       <strong>${esc(a.label)}</strong>
-      <span>${iconTag("dumbbell")} ${a.gym} &nbsp; ${iconTag("sauna")} ${a.sauna} &nbsp; ${iconTag("sun")} ${a.redlight} &nbsp; ${iconTag("wind")} ${a.hbot}</span>
+      <span>${iconTag("dumbbell")} ${a.gym} &nbsp; ${iconTag("sauna")} ${a.sauna} &nbsp; ${iconTag("sun")} ${a.redlight} &nbsp; ${iconTag("wind")} ${a.hbot}${a.avgRHR != null ? ` &nbsp; ${iconTag("heart")} ${a.avgRHR} bpm avg` : ""}</span>
       <span>Total: ${a.totalPts} pts &middot; Best day: ${a.bestDay} pts</span>
     `;
     el.appendChild(row);
@@ -1453,7 +1492,10 @@ function exerciseRowHtml(ex, checked, dataAttrs, actualId, lastActual, removeId,
       <div class="ex-line">
         <button class="check-btn small" ${dataAttrs}>${checked ? "✓" : "✗"}</button>
         <div class="ex-info">
-          <div class="ex-name">${esc(ex.name)}${removeId ? ` <span class="ex-custom-tag">added</span>` : ""}</div>
+          <div class="ex-name-row">
+            <div class="ex-name">${esc(ex.name)}${removeId ? ` <span class="ex-custom-tag">added</span>` : ""}</div>
+            ${actualId ? `<button class="ex-history-btn" data-history-id="${actualId}" aria-label="View history" title="View logged history">${iconTag("clock")}</button>` : ""}
+          </div>
           <div class="ex-meta">${esc(String(ex.sets))} × ${esc(String(ex.reps))} &middot; ${esc(ex.weight)}</div>
           ${ex.notes ? `<div class="ex-notes">${esc(ex.notes)}</div>` : ""}
           ${actualId ? `
@@ -1468,6 +1510,25 @@ function exerciseRowHtml(ex, checked, dataAttrs, actualId, lastActual, removeId,
       </div>
     </div>
   `;
+}
+
+function openExerciseHistory(id) {
+  const sessionKey = id.slice(0, id.lastIndexOf("-"));
+  const ex = resolveExercise(sessionKey, id);
+  const history = exerciseHistoryFor(id);
+  $("#history-modal-title").textContent = ex ? ex.name : "Exercise History";
+  const body = $("#history-modal-body");
+  if (history.length === 0) {
+    body.innerHTML = `<p class="hint">No logged history yet — hit Log on a set to start tracking this one over time.</p>`;
+  } else {
+    body.innerHTML = history.map((h) => `
+      <div class="history-row">
+        <span class="history-date">${esc(formatDateShort(h.date))}${h.inProgress ? " · today" : ""}</span>
+        <span class="history-actual">${esc(h.actual)}</span>
+      </div>
+    `).join("");
+  }
+  $("#history-modal").hidden = false;
 }
 
 function renderTraining() {
@@ -1807,6 +1868,16 @@ document.addEventListener("click", (e) => {
     return;
   }
 
+  if (t.dataset && t.dataset.historyId) {
+    openExerciseHistory(t.dataset.historyId);
+    return;
+  }
+
+  if (t.id === "history-modal-close" || t.id === "history-modal") {
+    $("#history-modal").hidden = true;
+    return;
+  }
+
   if (t.id === "training-add-exercise") {
     const session = sessionForDay(trainingViewDay);
     if (!session) return;
@@ -2046,6 +2117,7 @@ document.addEventListener("click", (e) => {
 // focused input (and cursor position) out from under the user mid-keystroke.
 let projectSaveTimer = null;
 let exActualSaveTimer = null;
+let rhrSaveTimer = null;
 document.addEventListener("input", (e) => {
   const t = e.target;
 
@@ -2062,6 +2134,20 @@ document.addEventListener("input", (e) => {
     state.trainingActuals[t.dataset.actualId] = t.value;
     if (exActualSaveTimer) clearTimeout(exActualSaveTimer);
     exActualSaveTimer = setTimeout(saveState, 400);
+    return;
+  }
+
+  if (t.classList.contains("rhr-input")) {
+    const day = t.dataset.day;
+    if (!state.monthly.days[day]) state.monthly.days[day] = { gym: false, sauna: false, redlight: false, hbot: false, rhr: "" };
+    state.monthly.days[day].rhr = t.value;
+    if (rhrSaveTimer) clearTimeout(rhrSaveTimer);
+    // Skip renderAll() like the other two above -- it would rebuild the
+    // whole monthly table and yank focus out from under the number pad
+    // mid-entry. The Avg RHR hint just goes stale until the next full
+    // render (tab switch, midnight rollover, etc), same tradeoff as
+    // project notes and logged actuals.
+    rhrSaveTimer = setTimeout(saveState, 400);
     return;
   }
 });
@@ -2130,6 +2216,11 @@ document.addEventListener("change", (e) => {
 // textareas (e.g. the bulk-add box) so Enter there still just inserts a
 // newline.
 document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const modal = $("#history-modal");
+    if (modal && !modal.hidden) modal.hidden = true;
+    return;
+  }
   if (e.key !== "Enter") return;
   const t = e.target;
   if (t.tagName !== "INPUT" || !t.dataset.enterTarget) return;
