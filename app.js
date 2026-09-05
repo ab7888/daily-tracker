@@ -283,15 +283,33 @@ function resolveExercise(sessionKey, id) {
 // instead of keeping a second, per-exercise log that could drift out of
 // sync with it — one history, two views onto it. Includes today's
 // not-yet-archived entry, if there is one, marked in-progress.
+//
+// Also backfills from trainingLog — the "Last time: ..." hint under each
+// exercise reads that, and it predates trainingHistory, so anyone whose
+// most recent logged session for this exercise happened before that
+// feature shipped would see "Last time: X" on the row but an empty
+// history modal. trainingLog only ever holds one (the latest) entry per
+// session, so this can add at most one extra row, and only if
+// trainingHistory doesn't already cover that same date.
 function exerciseHistoryFor(id) {
+  const sessionKey = id.slice(0, id.lastIndexOf("-"));
   const out = [];
+  const seenDates = new Set();
   (state.trainingHistory || []).forEach((s) => {
     (s.lines || []).forEach((ln) => {
-      if (ln.id === id) out.push({ date: s.date, actual: ln.actual, target: ln.target });
+      if (ln.id === id) {
+        out.push({ date: s.date, actual: ln.actual, target: ln.target });
+        seenDates.add(s.date);
+      }
     });
   });
+  const lastEntry = state.trainingLog[sessionKey];
+  if (lastEntry && lastEntry.entries && lastEntry.entries[id] && !seenDates.has(lastEntry.date)) {
+    out.push({ date: lastEntry.date, actual: lastEntry.entries[id], target: null });
+    seenDates.add(lastEntry.date);
+  }
   const inProgress = state.trainingActuals[id];
-  if (inProgress && inProgress.trim()) {
+  if (inProgress && inProgress.trim() && !seenDates.has(state.currentDate)) {
     out.push({ date: state.currentDate, actual: inProgress.trim(), target: null, inProgress: true });
   }
   out.sort((a, b) => b.date.localeCompare(a.date));
